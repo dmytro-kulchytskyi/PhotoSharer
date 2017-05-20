@@ -13,5 +13,11 @@ namespace PhotoSharer.Controllers
         {
             return View();
         }
+
+        public ActionResult CreateGroup()
+        {
+            return View();
+        }
+
     }
 }
