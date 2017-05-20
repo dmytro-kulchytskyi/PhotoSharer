@@ -15,6 +15,7 @@ namespace PhotoSharer.App_Start
     using NHibernate.Tool.hbm2ddl;
     using NHibernate.Cfg;
     using PhotoSharer.Models.Repository;
+    using PhotoSharer.Models.Repository.Interface;
 
     public static class NinjectWebCommon 
     {
@@ -80,7 +81,8 @@ namespace PhotoSharer.App_Start
             }).InSingletonScope();
 
 
-           
+            kernel.Bind<IUserRepository>().To<UserRepository>();
+            kernel.Bind<IGroupRepository>().To<GroupRepository>();
         }        
     }
 }
