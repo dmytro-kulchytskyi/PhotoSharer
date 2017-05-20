@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace PhotoSharer.Models
+namespace PhotoSharer.Models.ViewModels
 {
     public class CreateGroup
     {

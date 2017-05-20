@@ -8,7 +8,6 @@ namespace PhotoSharer.Controllers
 {
     public class GroupsController : Controller
     {
-        // GET: Groups
         public ActionResult Index()
         {
             return View();

@@ -164,8 +164,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
-    <Compile Include="Models\CreateGroup.cs" />
+    <Compile Include="Models\ViewModels\Groups\CreateGroup.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\Interfaces\IEntity.cs" />
+    <Compile Include="Models\Repository\Interface\IRepository.cs" />
+    <Compile Include="Models\Repository\Interface\IGroupRepository .cs" />
+    <Compile Include="Models\Repository\Interface\IUserRepository.cs" />
+    <Compile Include="Models\Repository\Repositiry.cs" />
+    <Compile Include="Models\Repository\GroupRepository.cs" />
+    <Compile Include="Models\Repository\UserRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -192,7 +199,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\ViewModels\Account\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

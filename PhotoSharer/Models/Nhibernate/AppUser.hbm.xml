@@ -2,9 +2,17 @@
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="PhotoSharer" namespace="PhotoSharer.Models">
   <class name="AppUser" dynamic-update="true" >
     <cache usage="read-write"/>
-    <id name="UserId" type="guid">
+    
+    <id name="Id" column="UserId" type="guid">
       <generator class="guid" />
     </id>
+    
     <property name="Name" />
+
+    <bag name="Groups" table="User_Group" cascade="save-update">
+      <key column="UserId"/>
+      <many-to-many class="Group" column="GroupId" />
+    </bag>
+    
   </class>
 </hibernate-mapping>
