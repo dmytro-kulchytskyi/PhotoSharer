@@ -37,11 +37,19 @@ namespace PhotoSharer.Models.Repository
             }
         }
 
-        public Guid Save(T instance)
+        public T GetById(Guid id)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                using (var transaction = session.BeginTransaction())
+                return session.Get<T>(id);
+            }
+        }
+
+        public Guid Save(T instance)
+        {
+                using (var session = sessionFactory.OpenSession())
+                {
+                    using (var transaction = session.BeginTransaction())
                 {
                     session.Save(instance);
                     transaction.Commit();
