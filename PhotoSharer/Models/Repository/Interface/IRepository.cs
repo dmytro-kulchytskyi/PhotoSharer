@@ -10,6 +10,7 @@ namespace PhotoSharer.Models.Repository
 {
    public  interface IRepository<T> where T :  class
     {
+        T GetById(Guid id);
         Guid Save(T instance);
         void Delete(T instance);
         IQueryOver<T> GetAll();
