@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhotoSharer.Models.Repository.Interface
 {
-    public interface IGroupRepository : IRepository<Group>
+    public interface IGroupRepository : IRepository<AppGroup>
     {
 
     }

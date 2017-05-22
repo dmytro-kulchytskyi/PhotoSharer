@@ -1,5 +1,6 @@
 ﻿using PhotoSharer.Models;
 using PhotoSharer.Models.Repository;
+using PhotoSharer.Models.Repository.Interface;
 using PhotoSharer.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,14 @@ namespace PhotoSharer.Controllers
 {
     public class GroupsController : Controller
     {
+        public GroupsController(IGroupRepository groupRepository)
+        {
+            this.groupRepository = groupRepository;
+        }
+
+        private readonly IGroupRepository groupRepository;
+
+
 
         public ActionResult Index()
         {
@@ -29,15 +38,14 @@ namespace PhotoSharer.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(model);
             }
-            Group newgroup = new Group()
+            AppGroup newgroup = new AppGroup()
             {
                 Name = model.Name,
-                InviteCode = "123",
-                CreatorId = Guid.NewGuid()
+                InviteCode = "123"
             };
-            GroupRepository.Save(newgroup);
+            groupRepository.Save(newgroup);
             return RedirectToAction("Index", "Home");
         }
 

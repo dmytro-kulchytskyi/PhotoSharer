@@ -10,6 +10,15 @@ namespace PhotoSharer.Models
     {
         public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
-        public virtual IList<Group> Groups { get; set; }
+
+        private IList<AppUser> _Groups;
+        public virtual IList<AppUser> Groups
+        {
+            get
+            {
+                return _Groups ?? (_Groups = new List<AppUser>());
+            }
+            set { _Groups = value; }
+        }
     }
 }

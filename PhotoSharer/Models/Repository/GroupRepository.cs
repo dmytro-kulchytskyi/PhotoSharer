@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PhotoSharer.Models.Repository
 {
-    public class GroupRepository : Repositiry<Group>, IGroupRepository
+    public class GroupRepository : Repository<AppGroup>, IGroupRepository
     {
         public GroupRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {

@@ -11,7 +11,7 @@
 
     <bag name="Groups" table="User_Group" cascade="save-update">
       <key column="UserId"/>
-      <many-to-many class="Group" column="GroupId" />
+      <many-to-many class="AppGroup" column="GroupId" />
     </bag>
     
   </class>
