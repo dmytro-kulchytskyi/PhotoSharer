@@ -1,15 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="PhotoSharer" namespace="PhotoSharer.Models">
-  <class name="Group" dynamic-update="true" >
+  <class name="AppGroup" dynamic-update="true" >
     <cache usage="read-write"/>
+    
     <id name="Id" column="GroupId" type="guid">
       <generator class="guid" />
     </id>
+    
     <property name="Name" />
     <property name="InviteCode" />
-    <property name="CreatorId" />
+    
+    <many-to-one name="Creator" class="AppUser" column="UserId" cascade="save-update" />
 
-    <bag name="Users" table="User_Group" inverse="true" cascade = "save-update">
+    <bag name="Users" table="User_Group"  cascade = "save-update">
       <key column="GroupId"/>
       <many-to-many class="AppUser" column="UserId"/>
     </bag>

@@ -158,7 +158,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <EmbeddedResource Include="Models\Nhibernate\AppUser.hbm.xml" />
-    <Content Include="Models\Nhibernate\Group.hbm.xml" />
+    <EmbeddedResource Include="Models\Nhibernate\AppGroup.hbm.xml" />
+    <EmbeddedResource Include="Models\Nhibernate\Photo.hbm.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -173,6 +174,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
+    <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\ViewModels\Groups\CreateGroup.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Interfaces\IEntity.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Models\Repository\Repository.cs" />
     <Compile Include="Models\Repository\GroupRepository.cs" />
     <Compile Include="Models\Repository\UserRepository.cs" />
+    <Compile Include="Source.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

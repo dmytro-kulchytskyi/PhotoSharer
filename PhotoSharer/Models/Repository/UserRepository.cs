@@ -7,7 +7,7 @@ using PhotoSharer.Models.Repository.Interface;
 
 namespace PhotoSharer.Models.Repository
 {
-    public class UserRepository : Repositiry<AppUser>, IUserRepository
+    public class UserRepository : Repository<AppUser>, IUserRepository
     {
         public UserRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
