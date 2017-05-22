@@ -170,7 +170,7 @@
     <Compile Include="Models\Repository\Interface\IRepository.cs" />
     <Compile Include="Models\Repository\Interface\IGroupRepository .cs" />
     <Compile Include="Models\Repository\Interface\IUserRepository.cs" />
-    <Compile Include="Models\Repository\Repositiry.cs" />
+    <Compile Include="Models\Repository\Repository.cs" />
     <Compile Include="Models\Repository\GroupRepository.cs" />
     <Compile Include="Models\Repository\UserRepository.cs" />
     <Compile Include="Startup.cs" />

@@ -7,12 +7,12 @@ using System.Web;
 
 namespace PhotoSharer.Models.Repository
 {
-    public class Repositiry<T> : IRepository<T> 
+    public class Repository<T> : IRepository<T> 
         where T : class, IEntity
     {
         private ISessionFactory sessionFactory;
 
-        public Repositiry(ISessionFactory sessionFactory)
+        public  Repository(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
