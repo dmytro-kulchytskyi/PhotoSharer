@@ -87,12 +87,15 @@ namespace PhotoSharer.App_Start
 
             kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<IGroupRepository>().To<GroupRepository>();
+            kernel.Bind<ILoginRepository>().To<LoginRepository>();
 
             kernel.Bind<IUserStore<AppUser, Guid>>().To<AppUserStore>();
 
             kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
             kernel.Bind<AppUserManager>().To<AppUserManager>();
             kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
+
+          
         }        
     }
 }

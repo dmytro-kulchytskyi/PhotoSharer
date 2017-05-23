@@ -163,6 +163,7 @@
     <EmbeddedResource Include="Models\Nhibernate\AppUser.hbm.xml" />
     <EmbeddedResource Include="Models\Nhibernate\AppGroup.hbm.xml" />
     <EmbeddedResource Include="Models\Nhibernate\Photo.hbm.xml" />
+    <EmbeddedResource Include="Models\Nhibernate\Login.hbm.xml" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -180,7 +181,10 @@
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Identity\AppUserManager.cs" />
     <Compile Include="Identity\AppUserStore.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\Repository\Interface\ILoginRepository.cs" />
+    <Compile Include="Models\Repository\LoginRepository.cs" />
     <Compile Include="Models\ViewModels\Account\ExternalLoginConfirmationViewModel.cs" />
     <Compile Include="Models\ViewModels\Account\ExternalLoginListViewModel.cs" />
     <Compile Include="Models\ViewModels\Groups\CreateGroup.cs" />

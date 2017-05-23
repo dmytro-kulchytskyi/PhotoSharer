@@ -13,10 +13,13 @@ namespace PhotoSharer.Identity
     public class AppUserStore : IUserStore<AppUser, Guid>, IUserLoginStore<AppUser, Guid>
     {
         private readonly IUserRepository UserRepository;
+        private readonly ILoginRepository LoginRepository;
 
-        public AppUserStore(IUserRepository userRepository)
+        public AppUserStore(IUserRepository userRepository, 
+            ILoginRepository loginRepository)
         {
             UserRepository = userRepository;
+            LoginRepository = loginRepository;
         }
 
         public Task AddLoginAsync(AppUser user, UserLoginInfo login)
@@ -38,12 +41,14 @@ namespace PhotoSharer.Identity
 
         public void Dispose()
         {
-         
+            
         }
 
         public Task<AppUser> FindAsync(UserLoginInfo login)
         {
-            throw new NotImplementedException();
+           var user =  LoginRepository.GetAll().Where(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)
+                    .Select(l => l.User).ToList().FirstOrDefault();
+            return Task.FromResult(user);
         }
 
         public Task<AppUser> FindByIdAsync(Guid userId)
@@ -60,12 +65,18 @@ namespace PhotoSharer.Identity
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(AppUser user)
         {
-            throw new NotImplementedException();
+            IList<UserLoginInfo> logins = user.Logins.Select(login => new UserLoginInfo(login.LoginProvider, login.ProviderKey)).ToList();
+            return Task.FromResult(logins);
         }
 
-        public Task RemoveLoginAsync(AppUser user, UserLoginInfo login)
+        public Task RemoveLoginAsync(AppUser user, UserLoginInfo loginInfo)
         {
-            throw new NotImplementedException();
+            var login = user.Logins.Where(l => l.LoginProvider == loginInfo.LoginProvider && l.ProviderKey == loginInfo.ProviderKey).ToList().FirstOrDefault();
+            if (login != null)
+            {
+                LoginRepository.Delete(login);
+            }
+            return Task.FromResult(true);
         }
 
         public Task UpdateAsync(AppUser user)

@@ -13,6 +13,10 @@ namespace PhotoSharer.Models
         public virtual string UserName { get; set; }
         public virtual string Email { get; set; }
 
+       
+        public virtual string LoginProvider { get; set; }
+        public virtual string ProviderKey { get; set; }
+
         private IList<AppUser> _Groups;
         public virtual IList<AppUser> Groups
         {
@@ -21,6 +25,16 @@ namespace PhotoSharer.Models
                 return _Groups ?? (_Groups = new List<AppUser>());
             }
             set { _Groups = value; }
+        }
+
+        private IList<Login> _Logins;
+        public virtual IList<Login> Logins
+        {
+            get
+            {
+                return _Logins ?? (_Logins = new List<Login>());
+            }
+            set { _Logins = value; }
         }
     }
 }

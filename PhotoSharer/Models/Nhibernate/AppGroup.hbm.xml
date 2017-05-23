@@ -10,9 +10,9 @@
     <property name="Name" />
     <property name="InviteCode" />
     
-    <many-to-one name="Creator" class="AppUser" column="UserId" cascade="save-update" />
+    <many-to-one name="Creator" class="AppUser" column="UserId" cascade="save-update" lazy="false"/>
 
-    <bag name="Users" table="User_Group"  cascade = "save-update">
+    <bag name="Users" table="User_Group"  cascade="save-update" lazy="false">
       <key column="GroupId"/>
       <many-to-many class="AppUser" column="UserId"/>
     </bag>

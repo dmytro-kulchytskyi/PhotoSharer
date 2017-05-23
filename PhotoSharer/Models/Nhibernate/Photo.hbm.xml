@@ -10,8 +10,9 @@
     <property name="Description" />
     <property name="Source" />
     <property name="ExternalId" />
+    <property name="Link" />
 
-    <many-to-one name="User" class="AppUser" column="UserId" cascade="save-update" />
+    <many-to-one name="User" class="AppUser" column="UserId" cascade="save-update" lazy="false" />
 
   </class>
 </hibernate-mapping>

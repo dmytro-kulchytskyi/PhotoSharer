@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNet.Identity;
 using NHibernate;
 using PhotoSharer.Models.Repository.Interface;
 
@@ -15,7 +16,7 @@ namespace PhotoSharer.Models.Repository
         {
             SessionFactory = sessionFactory;
         }
-
+ 
         public AppUser GetByUserName(string userName)
         {
             using (var session = SessionFactory.OpenSession())

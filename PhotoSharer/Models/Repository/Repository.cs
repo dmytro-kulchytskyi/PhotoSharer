@@ -1,4 +1,5 @@
 ﻿using NHibernate;
+using NHibernate.Linq;
 using PhotoSharer.Models.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Web;
 
 namespace PhotoSharer.Models.Repository
 {
-    public class Repository<T> : IRepository<T> 
+    public abstract class Repository<T> : IRepository<T> 
         where T : class, IEntity
     {
         private ISessionFactory SessionFactory;
@@ -49,6 +50,14 @@ namespace PhotoSharer.Models.Repository
                     transaction.Commit();
                     return instance.Id;
                 }
+            }
+        }
+
+        public IQueryable<T> GetAll()
+        {
+            using (var session = SessionFactory.OpenSession())
+            {
+                return session.Query<T>();
             }
         }
     }

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" default-lazy="false" assembly="PhotoSharer" namespace="PhotoSharer.Models">
+  <class name="Login" dynamic-update="true" >
+    <cache usage="read-write"/>
+
+    <id name="Id" column="LoginId" type="guid">
+      <generator class="guid" />
+    </id>
+
+    <property name="LoginProvider" />
+    <property name="ProviderKey" />
+
+    <many-to-one name="User" class="AppUser" column="UserId" cascade="save-update" lazy="false"/>
+
+  </class>
+</hibernate-mapping>
