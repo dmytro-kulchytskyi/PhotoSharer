@@ -18,6 +18,7 @@ namespace PhotoSharer.App_Start
     using PhotoSharer.Models.Repository.Interface;
     using Microsoft.AspNet.Identity;
     using PhotoSharer.Identity;
+    using Microsoft.Owin.Security;
 
     public static class NinjectWebCommon 
     {
@@ -76,11 +77,13 @@ namespace PhotoSharer.App_Start
                 configuration.Configure();
                 configuration.AddAssembly(typeof(AppUser).Assembly);
                 configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, System.Configuration.ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString);
-                ISessionFactory sessionFactory = configuration.BuildSessionFactory();
+                var sessionFactory = configuration.BuildSessionFactory();
                 new SchemaUpdate(configuration).Execute(true, true);
                 return sessionFactory;
 
             }).InSingletonScope();
+
+            kernel.Bind<IAuthenticationManager>().ToMethod(_ => HttpContext.Current.GetOwinContext().Authentication);
 
 
             kernel.Bind<IUserRepository>().To<UserRepository>();
