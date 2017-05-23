@@ -1,4 +1,5 @@
-﻿using PhotoSharer.Models.Interfaces;
+﻿using Microsoft.AspNet.Identity;
+using PhotoSharer.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,10 @@ using System.Web;
 
 namespace PhotoSharer.Models
 {
-    public class AppUser : IEntity
+    public class AppUser : IEntity, IUser<Guid>
     {
         public virtual Guid Id { get; set; }
-        public virtual string Name { get; set; }
-
+        public virtual string UserName { get; set; }
         private IList<AppUser> _Groups;
         public virtual IList<AppUser> Groups
         {
@@ -20,5 +20,7 @@ namespace PhotoSharer.Models
             }
             set { _Groups = value; }
         }
+
+       
     }
 }

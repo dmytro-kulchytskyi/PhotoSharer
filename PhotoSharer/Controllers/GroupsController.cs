@@ -14,10 +14,10 @@ namespace PhotoSharer.Controllers
     {
         public GroupsController(IGroupRepository groupRepository)
         {
-            this.groupRepository = groupRepository;
+          GroupRepository = groupRepository;
         }
 
-        private readonly IGroupRepository groupRepository;
+        private readonly IGroupRepository GroupRepository;
 
 
 
@@ -40,12 +40,14 @@ namespace PhotoSharer.Controllers
             {
                 return View(model);
             }
+
             AppGroup newgroup = new AppGroup()
             {
                 Name = model.Name,
                 InviteCode = "123"
             };
-            groupRepository.Save(newgroup);
+
+            GroupRepository.Save(newgroup);
             return RedirectToAction("Index", "Home");
         }
 
