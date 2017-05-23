@@ -8,6 +8,7 @@
     </id>
     
     <property name="UserName" />
+    <property name="Email" />
 
     <bag name="Groups" table="User_Group" cascade="save-update">
       <key column="UserId"/>

@@ -5,9 +5,10 @@ namespace PhotoSharer.App_Start
 {
     using System;
     using System.Web;
-
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using System.Net.Http;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-
     using Ninject;
     using Ninject.Web.Common;
     using NHibernate;
@@ -16,7 +17,6 @@ namespace PhotoSharer.App_Start
     using NHibernate.Cfg;
     using PhotoSharer.Models.Repository;
     using PhotoSharer.Models.Repository.Interface;
-    using Microsoft.AspNet.Identity;
     using PhotoSharer.Identity;
     using Microsoft.Owin.Security;
 
@@ -85,13 +85,14 @@ namespace PhotoSharer.App_Start
 
             kernel.Bind<IAuthenticationManager>().ToMethod(_ => HttpContext.Current.GetOwinContext().Authentication);
 
-
             kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<IGroupRepository>().To<GroupRepository>();
 
-
             kernel.Bind<IUserStore<AppUser, Guid>>().To<AppUserStore>();
-            kernel.Bind<UserManager>
+
+            kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
+            kernel.Bind<AppUserManager>().To<AppUserManager>();
+            kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
         }        
     }
 }

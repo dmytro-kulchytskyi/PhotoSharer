@@ -172,6 +172,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\Startup.auth.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -180,6 +181,8 @@
     <Compile Include="Identity\AppUserManager.cs" />
     <Compile Include="Identity\AppUserStore.cs" />
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\ViewModels\Account\ExternalLoginConfirmationViewModel.cs" />
+    <Compile Include="Models\ViewModels\Account\ExternalLoginListViewModel.cs" />
     <Compile Include="Models\ViewModels\Groups\CreateGroup.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Interfaces\IEntity.cs" />
@@ -210,6 +213,9 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Groups\CreateGroup.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -219,7 +225,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\ViewModels\Account\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -11,6 +11,7 @@ namespace PhotoSharer.Models
     {
         public virtual Guid Id { get; set; }
         public virtual string UserName { get; set; }
+        public virtual string Email { get; set; }
 
         private IList<AppUser> _Groups;
         public virtual IList<AppUser> Groups
