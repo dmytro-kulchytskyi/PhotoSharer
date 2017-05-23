@@ -13,13 +13,15 @@ namespace PhotoSharer.Controllers
 {
     public class AccountController : Controller
     {
-        public AccountController(IAuthenticationManager AuthenticationManager, SignInManager<AppUser, Guid> SignInManager)
-        {
-                
-        }
-
         private readonly IAuthenticationManager AuthenticationManager;
         private readonly SignInManager<AppUser, Guid> SignInManager;
+        public AccountController(IAuthenticationManager authenticationManager, SignInManager<AppUser, Guid> signInManager)
+        {
+            AuthenticationManager = authenticationManager;
+            SignInManager = signInManager;
+        }
+
+      
 
 
         public ActionResult Login()
