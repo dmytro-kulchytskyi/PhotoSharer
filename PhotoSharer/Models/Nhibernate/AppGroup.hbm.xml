@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="PhotoSharer" namespace="PhotoSharer.Models">
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" default-lazy="false" assembly="PhotoSharer" namespace="PhotoSharer.Models">
   <class name="AppGroup" dynamic-update="true" >
     <cache usage="read-write"/>
     

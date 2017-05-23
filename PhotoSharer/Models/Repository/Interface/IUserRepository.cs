@@ -8,6 +8,6 @@ namespace PhotoSharer.Models.Repository.Interface
 {
     public interface IUserRepository : IRepository<AppUser>
     {
-
+        AppUser GetByUserName(string userName);
     }
 }

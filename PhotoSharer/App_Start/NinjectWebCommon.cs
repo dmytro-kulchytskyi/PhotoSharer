@@ -16,10 +16,12 @@ namespace PhotoSharer.App_Start
     using NHibernate.Cfg;
     using PhotoSharer.Models.Repository;
     using PhotoSharer.Models.Repository.Interface;
+    using Microsoft.AspNet.Identity;
+    using PhotoSharer.Identity;
 
     public static class NinjectWebCommon 
     {
-        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        public static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
@@ -83,6 +85,10 @@ namespace PhotoSharer.App_Start
 
             kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<IGroupRepository>().To<GroupRepository>();
+
+
+            kernel.Bind<IUserStore<AppUser, Guid>>().To<AppUserStore>();
+            kernel.Bind<UserManager>
         }        
     }
 }

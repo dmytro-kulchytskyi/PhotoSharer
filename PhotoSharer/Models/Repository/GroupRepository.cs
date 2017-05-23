@@ -9,10 +9,12 @@ namespace PhotoSharer.Models.Repository
 {
     public class GroupRepository : Repository<AppGroup>, IGroupRepository
     {
+        private ISessionFactory SessionFactory;
+
         public GroupRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
+            SessionFactory = sessionFactory;
         }
-
 
 
     }

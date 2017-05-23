@@ -9,7 +9,7 @@ namespace PhotoSharer.Models
     {
         public virtual Guid Id { get; set; }
         public virtual string Description { get; set; }
-        public virtual Source Source { get; set; }
+        public virtual string Source { get; set; }
         public virtual string ExternalId { get; set; }
         public virtual AppUser User { get; set; }
     }

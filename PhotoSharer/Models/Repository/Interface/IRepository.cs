@@ -13,6 +13,5 @@ namespace PhotoSharer.Models.Repository
         T GetById(Guid id);
         Guid Save(T instance);
         void Delete(T instance);
-        IQueryOver<T> GetAll();
     }
 }

@@ -5,8 +5,8 @@ using System.Web;
 
 namespace PhotoSharer
 {
-    public enum Source
+    public static class Source
     {
-        Facebook = 1
+        public static string FaceBook = "Facebook";
     }
 }
