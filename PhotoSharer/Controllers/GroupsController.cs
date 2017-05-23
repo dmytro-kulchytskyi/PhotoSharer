@@ -41,13 +41,13 @@ namespace PhotoSharer.Controllers
                 return View(model);
             }
 
-            AppGroup newgroup = new AppGroup()
+            AppGroup group = new AppGroup()
             {
                 Name = model.Name,
-                InviteCode = "123"
+                InviteCode = "http://photosharer.azurewebsites.net/groups/group/"+model.Name
             };
 
-            GroupRepository.Save(newgroup);
+            GroupRepository.Save(group);
             return RedirectToAction("Index", "Home");
         }
 

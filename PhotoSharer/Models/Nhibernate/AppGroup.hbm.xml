@@ -3,7 +3,7 @@
   <class name="AppGroup" dynamic-update="true" >
     <cache usage="read-write"/>
     
-    <id name="Id" column="GroupId" type="guid">
+    <id name="Id" column="Id" type="guid">
       <generator class="guid" />
     </id>
     

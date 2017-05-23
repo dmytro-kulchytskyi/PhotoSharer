@@ -12,7 +12,7 @@
 
     <bag name="Groups" table="User_Group" cascade="save-update" lazy="false">
       <key column="UserId"/>
-      <many-to-many class="AppGroup" column="GroupId" />
+      <many-to-many class="AppGroup" column="Id" />
     </bag>
 
     <bag name="Logins" inverse="true" lazy="false">

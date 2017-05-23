@@ -66,7 +66,10 @@ namespace PhotoSharer.Controllers
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
-
+        public ActionResult Properties()
+        {
+            return View();
+        }
 
         #region Helpers
        

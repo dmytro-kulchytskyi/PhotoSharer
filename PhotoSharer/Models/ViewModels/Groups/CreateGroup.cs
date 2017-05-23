@@ -7,7 +7,7 @@ namespace PhotoSharer.Models.ViewModels
     public class CreateGroup
     {
         [ScaffoldColumn(false)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
 
         [Required(ErrorMessage = "Поле должно быть установлено")]
@@ -19,6 +19,6 @@ namespace PhotoSharer.Models.ViewModels
         public string InviteCode { get; set; }
 
         [ScaffoldColumn(false)]
-        public Guid CreatorId { get; set; }
+        public Guid Creator { get; set; }
     }
 }
