@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using PhotoSharer.Models;
 using Microsoft.AspNet.Identity.Owin;
 using PhotoSharer.Models.ViewModels.Account;
+using Microsoft.AspNet.Identity;
+using PhotoSharer.Identity;
 
 namespace PhotoSharer.Controllers
 {
@@ -15,15 +17,15 @@ namespace PhotoSharer.Controllers
     {
         private readonly IAuthenticationManager AuthenticationManager;
         private readonly SignInManager<AppUser, Guid> SignInManager;
-        public AccountController(IAuthenticationManager authenticationManager, SignInManager<AppUser, Guid> signInManager)
+        private readonly AppUserManager UserManager;
+        public AccountController(IAuthenticationManager authenticationManager, SignInManager<AppUser, Guid> signInManager, AppUserManager userManager)
         {
             AuthenticationManager = authenticationManager;
             SignInManager = signInManager;
+            UserManager = userManager;
         }
 
-      
-
-
+        [HttpGet]
         public ActionResult Login()
         {
             return View();
@@ -48,14 +50,14 @@ namespace PhotoSharer.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login
-        
+
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return Redirect(returnUrl);
+                    return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout"); 
+                    return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
@@ -66,13 +68,71 @@ namespace PhotoSharer.Controllers
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
-        public ActionResult Properties()
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Groups");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Get the information about the user from the external login provider
+                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    return View("ExternalLoginFailure");
+                }
+
+                var user = new AppUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
+                AddErrors(result);
+            }
+
+            ViewBag.ReturnUrl = returnUrl;
+            return View(model);
+        }
+
+        [Authorize]
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Groups");
         }
 
         #region Helpers
-       
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Groups");
+        }
+
+
         internal class ChallengeResult : HttpUnauthorizedResult
         {
             private readonly string XsrfKey = System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
@@ -101,8 +161,11 @@ namespace PhotoSharer.Controllers
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
-            #endregion
+           
 
         }
+
+
+        #endregion
     }
 }

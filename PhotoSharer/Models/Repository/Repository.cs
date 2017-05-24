@@ -53,12 +53,26 @@ namespace PhotoSharer.Models.Repository
             }
         }
 
-        public IQueryable<T> GetAll()
+        public void Update(T instance)
         {
             using (var session = SessionFactory.OpenSession())
             {
-                return session.Query<T>();
+                using (var transaction = session.BeginTransaction())
+                {
+                    session.Update(instance);
+                    transaction.Commit();
+                }
             }
         }
+
+        /*
+         public IQueryable<T> GetAll()
+         {
+             using (var session = SessionFactory.OpenSession())
+             {
+                 return session.Query<T>();
+             }
+         } 
+         */
     }
 }

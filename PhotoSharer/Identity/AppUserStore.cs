@@ -10,21 +10,29 @@ using PhotoSharer.Models.Repository.Interface;
 
 namespace PhotoSharer.Identity
 {
-    public class AppUserStore : IUserStore<AppUser, Guid>, IUserLoginStore<AppUser, Guid>
+    public class AppUserStore : IUserStore<AppUser, Guid>, IUserLoginStore<AppUser, Guid>, IUserLockoutStore<AppUser, Guid>, IUserTwoFactorStore<AppUser, Guid>
     {
         private readonly IUserRepository UserRepository;
         private readonly ILoginRepository LoginRepository;
 
-        public AppUserStore(IUserRepository userRepository, 
+        public AppUserStore(IUserRepository userRepository,
             ILoginRepository loginRepository)
         {
             UserRepository = userRepository;
             LoginRepository = loginRepository;
         }
 
-        public Task AddLoginAsync(AppUser user, UserLoginInfo login)
+        public Task AddLoginAsync(AppUser user, UserLoginInfo loginInfo)
         {
-            throw new NotImplementedException();
+            var login = new Login()
+            {
+                LoginProvider = loginInfo.LoginProvider,
+                ProviderKey = loginInfo.ProviderKey,
+                User = user
+            };
+            user.Logins.Add(login);
+            LoginRepository.Save(login);
+            return Task.FromResult(true);
         }
 
         public Task CreateAsync(AppUser user)
@@ -41,13 +49,12 @@ namespace PhotoSharer.Identity
 
         public void Dispose()
         {
-            
+
         }
 
         public Task<AppUser> FindAsync(UserLoginInfo login)
         {
-           var user =  LoginRepository.GetAll().Where(l => l.LoginProvider == login.LoginProvider && l.ProviderKey == login.ProviderKey)
-                    .Select(l => l.User).ToList().FirstOrDefault();
+            var user = LoginRepository.GetUserByLoginInfo(login);
             return Task.FromResult(user);
         }
 
@@ -56,17 +63,47 @@ namespace PhotoSharer.Identity
             return Task.FromResult(UserRepository.GetById(userId));
         }
 
-      
+
         public Task<AppUser> FindByNameAsync(string userName)
         {
             var user = UserRepository.GetByUserName(userName);
             return Task.FromResult(user);
         }
 
+        public Task<int> GetAccessFailedCountAsync(AppUser user)
+        {
+
+            //TODO
+            return Task.FromResult(0);
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(AppUser user)
+        {
+            //TODO
+            return Task.FromResult(false);
+        }
+
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(AppUser user)
+        {
+            //TODO
+            return Task.FromResult(new DateTimeOffset());
+        }
+
         public Task<IList<UserLoginInfo>> GetLoginsAsync(AppUser user)
         {
             IList<UserLoginInfo> logins = user.Logins.Select(login => new UserLoginInfo(login.LoginProvider, login.ProviderKey)).ToList();
             return Task.FromResult(logins);
+        }
+
+        public Task<bool> GetTwoFactorEnabledAsync(AppUser user)
+        {
+            return Task.FromResult(false);
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(AppUser user)
+        {
+            //TODO
+            return Task.FromResult(0);
         }
 
         public Task RemoveLoginAsync(AppUser user, UserLoginInfo loginInfo)
@@ -79,9 +116,32 @@ namespace PhotoSharer.Identity
             return Task.FromResult(true);
         }
 
+        public Task ResetAccessFailedCountAsync(AppUser user)
+        {
+            //TODO
+            return Task.FromResult(0);
+        }
+
+        public Task SetLockoutEnabledAsync(AppUser user, bool enabled)
+        {
+            //TODO
+            return Task.FromResult(0);
+        }
+
+        public Task SetLockoutEndDateAsync(AppUser user, DateTimeOffset lockoutEnd)
+        {
+            //TODO
+            return Task.FromResult(0);
+        }
+
+        public Task SetTwoFactorEnabledAsync(AppUser user, bool enabled)
+        {
+            return Task.FromResult(true);
+        }
+
         public Task UpdateAsync(AppUser user)
         {
-            UserRepository.Save(user);
+            UserRepository.Update(user);
             return Task.FromResult(true);
         }
     }

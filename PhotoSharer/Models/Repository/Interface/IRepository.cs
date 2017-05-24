@@ -12,7 +12,7 @@ namespace PhotoSharer.Models.Repository
     {
         T GetById(Guid id);
         Guid Save(T instance);
+        void Update(T instance);
         void Delete(T instance);
-        IQueryable<T> GetAll();
     }
 }

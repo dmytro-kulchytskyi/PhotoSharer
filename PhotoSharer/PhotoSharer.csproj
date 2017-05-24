@@ -182,6 +182,7 @@
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Identity\AppUserManager.cs" />
     <Compile Include="Identity\AppUserStore.cs" />
+    <Compile Include="ILogin\Repository.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Models\Repository\Interface\ILoginRepository.cs" />
