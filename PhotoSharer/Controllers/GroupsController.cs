@@ -1,4 +1,5 @@
-﻿using PhotoSharer.Models;
+﻿using Microsoft.AspNet.Identity;
+using PhotoSharer.Models;
 using PhotoSharer.Models.Repository;
 using PhotoSharer.Models.Repository.Interface;
 using PhotoSharer.Models.ViewModels;
@@ -44,7 +45,8 @@ namespace PhotoSharer.Controllers
             AppGroup group = new AppGroup()
             {
                 Name = model.Name,
-                InviteCode = "http://photosharer.azurewebsites.net/groups/group/"+model.Name
+                InviteCode = "12310",
+                Creator = new AppUser() { Id = Guid.Parse(User.Identity.GetUserId()) }
             };
 
             GroupRepository.Save(group);
