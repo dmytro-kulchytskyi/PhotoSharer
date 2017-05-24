@@ -19,9 +19,8 @@ namespace PhotoSharer.Identity
 
         public static AppUserManager Create(IdentityFactoryOptions<AppUserManager> options, IOwinContext context)
         {
-            var manager = (AppUserManager)NinjectWebCommon.bootstrapper.Kernel.GetService(typeof(AppUserManager));
+            var manager = NinjectWebCommon.GetService<AppUserManager>();
 
-            // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<AppUser, Guid>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,

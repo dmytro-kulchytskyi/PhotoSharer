@@ -11,16 +11,16 @@ namespace PhotoSharer.Models.Repository
     public abstract class Repository<T> : IRepository<T> 
         where T : class, IEntity
     {
-        private ISessionFactory SessionFactory;
+        private ISessionFactory sessionFactory;
 
         public  Repository(ISessionFactory sessionFactory)
         {
-            this.SessionFactory = sessionFactory;
+            this.sessionFactory = sessionFactory;
         }
 
         public void Delete(T instance)
         {
-            using (var session = SessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {
@@ -28,13 +28,11 @@ namespace PhotoSharer.Models.Repository
                     transaction.Commit();
                 }
             }
-        }
-
-      
+        }      
 
         public T GetById(Guid id)
         {
-            using (var session = SessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
                 return session.Get<T>(id);
             }
@@ -42,8 +40,8 @@ namespace PhotoSharer.Models.Repository
 
         public Guid Save(T instance)
         {
-                using (var session = SessionFactory.OpenSession())
-                {
+            using (var session = sessionFactory.OpenSession())
+            {
                     using (var transaction = session.BeginTransaction())
                 {
                     session.Save(instance);
@@ -55,7 +53,7 @@ namespace PhotoSharer.Models.Repository
 
         public void Update(T instance)
         {
-            using (var session = SessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
                 using (var transaction = session.BeginTransaction())
                 {

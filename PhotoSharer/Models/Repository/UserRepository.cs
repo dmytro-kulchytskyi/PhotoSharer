@@ -10,16 +10,16 @@ namespace PhotoSharer.Models.Repository
 {
     public class UserRepository : Repository<AppUser>, IUserRepository
     {
-        private ISessionFactory SessionFactory;
+        private ISessionFactory sessionFactory;
 
         public UserRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
-            SessionFactory = sessionFactory;
+            this.sessionFactory = sessionFactory;
         }
- 
+
         public AppUser GetByUserName(string userName)
         {
-            using (var session = SessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
                 var user = session.QueryOver<AppUser>().Where(u => u.UserName == userName).List().FirstOrDefault();
                 return user;

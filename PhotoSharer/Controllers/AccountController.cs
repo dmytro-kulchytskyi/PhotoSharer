@@ -15,14 +15,15 @@ namespace PhotoSharer.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAuthenticationManager AuthenticationManager;
-        private readonly SignInManager<AppUser, Guid> SignInManager;
-        private readonly AppUserManager UserManager;
+        private readonly IAuthenticationManager authenticationManager;
+        private readonly SignInManager<AppUser, Guid> signInManager;
+        private readonly AppUserManager userManager;
+
         public AccountController(IAuthenticationManager authenticationManager, SignInManager<AppUser, Guid> signInManager, AppUserManager userManager)
         {
-            AuthenticationManager = authenticationManager;
-            SignInManager = signInManager;
-            UserManager = userManager;
+            this.authenticationManager = authenticationManager;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
         }
 
         public ActionResult Properties()
@@ -47,7 +48,7 @@ namespace PhotoSharer.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            var loginInfo = await authenticationManager.GetExternalLoginInfoAsync();
 
             if (loginInfo == null)
             {
@@ -56,15 +57,15 @@ namespace PhotoSharer.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
 
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            var result = await signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
+                // case SignInStatus.LockedOut:
+                //     return View("Lockout");
+                // case SignInStatus.RequiresVerification:
+                //    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
                 case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
@@ -87,20 +88,20 @@ namespace PhotoSharer.Controllers
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                var info = await authenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
                 }
 
                 var user = new AppUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
+                var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
+                    result = await userManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                         return RedirectToLocal(returnUrl);
                     }
                 }
@@ -114,7 +115,7 @@ namespace PhotoSharer.Controllers
         [Authorize]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Groups");
         }
 

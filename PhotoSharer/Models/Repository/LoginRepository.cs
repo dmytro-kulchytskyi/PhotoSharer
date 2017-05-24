@@ -11,16 +11,16 @@ namespace PhotoSharer.Models.Repository
 {
     public class LoginRepository : Repository<Login>, ILoginRepository
     {
-        private ISessionFactory SessionFactory;
+        private ISessionFactory sessionFactory;
 
         public LoginRepository(ISessionFactory sessionFactory) : base(sessionFactory)
         {
-            SessionFactory = sessionFactory;
+            this.sessionFactory = sessionFactory;
         }
 
         public AppUser GetUserByLoginInfo(UserLoginInfo loginInfo)
         {
-            using (var session = SessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenSession())
             {
                 var user = session.Query<Login>()
                     .Where(login => login.LoginProvider == loginInfo.LoginProvider && login.ProviderKey == loginInfo.ProviderKey)

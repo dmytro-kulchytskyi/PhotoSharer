@@ -20,20 +20,26 @@ namespace PhotoSharer.App_Start
     using PhotoSharer.Identity;
     using Microsoft.Owin.Security;
 
-    public static class NinjectWebCommon 
+    public static class NinjectWebCommon
     {
-        public static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        public static T GetService<T>()
+            where T : class
+        {
+            return (T)bootstrapper.Kernel.GetService(typeof(T));
+        }
+
+        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
         /// </summary>
-        public static void Start() 
+        public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
         }
-        
+
         /// <summary>
         /// Stops the application.
         /// </summary>
@@ -41,7 +47,7 @@ namespace PhotoSharer.App_Start
         {
             bootstrapper.ShutDown();
         }
-        
+
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
@@ -70,8 +76,7 @@ namespace PhotoSharer.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ISessionFactory>().ToMethod(context =>
-
+            kernel.Bind<ISessionFactory>().ToMethod(_ =>
             {
                 var configuration = new Configuration();
                 configuration.Configure();
@@ -95,7 +100,7 @@ namespace PhotoSharer.App_Start
             kernel.Bind<AppUserManager>().To<AppUserManager>();
             kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
 
-          
-        }        
+
+        }
     }
 }
