@@ -25,6 +25,11 @@ namespace PhotoSharer.Controllers
             UserManager = userManager;
         }
 
+        public ActionResult Properties()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult Login()
         {
@@ -161,7 +166,7 @@ namespace PhotoSharer.Controllers
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
-           
+
 
         }
 
