@@ -39,7 +39,7 @@ namespace PhotoSharer.MVC.Controllers
                     Name = group.Name,
                     InviteCode = group.InviteCode,
                     Url = group.Url
-                });
+                }).ToList();
 
                 return View(groupsItemList);
         }
