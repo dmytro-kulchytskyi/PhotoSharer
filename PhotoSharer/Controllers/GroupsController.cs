@@ -20,14 +20,17 @@ namespace PhotoSharer.Controllers
         {
             this.groupRepository = groupRepository;
         }
-        public ActionResult Index()
+
+        [HttpGet]
+        public ActionResult Index(int page = 1)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            
-            return View(groupRepository.GetUserGroups(Guid.Parse(User.Identity.GetUserId())));
+            int item = 10;
+            if (!User.Identity.IsAuthenticated) return RedirectToAction("Login", "Account");
+            var usersGroup = groupRepository.GetUserGroups(Guid.Parse(User.Identity.GetUserId()));
+            ViewBag.pages = usersGroup.Count/ item;
+            if(usersGroup.Count% item != 0) ViewBag.pages++;
+             var usersGroups=usersGroup.OrderBy(n => n.Name).Skip((page - 1) * item).Take(item);
+            return View(usersGroups);
         }
 
         [HttpGet]

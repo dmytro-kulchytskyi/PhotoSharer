@@ -29,8 +29,7 @@ namespace PhotoSharer.Models.Repository
             {
                 var groups = session.QueryOver<AppGroup>().Where(user=>user.Creator.Id==UserId).List();
                 return groups;
-         
-            }
+          }
         }
         public AppGroup GetGroupById(Guid Id)
         {

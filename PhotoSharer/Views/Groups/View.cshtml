@@ -12,30 +12,19 @@
     </div>
 </div>
 
-<div class="panel panel-default col-md-10 col-sm-12">
+@if (Model == null)
+{
+    <div class="alert alert-warning col-md-10 col-sm-12" role="alert">You don`t stay in no one group </div>
+}
+else
+{<div class="panel panel-default col-md-10 col-sm-12">
         <div class="panel-heading">
-            <h3 class="panel-title">Group List</h3>
+            <h3 class="panel-title">@Model.Name</h3>
         </div>
         <div class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                    <tr><th>Group Name</th> <th>Actions</th></tr>
-                </thead>
-                <tbody>
-                    
-                        <tr>
-                            <th>@Model.Name</th>
-                            <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#GetLink">
-                                    Get group link
-                                </button>
-                                <button type="button" class="btn btn-danger">Go out! <span class="glyphicon glyphicon-remove-circle"></span></button>
-                            </td>
-                        </tr>
-
-                    }
-                </tbody>
-            </table>
+            <h3> Creator : @Model.Creator.UserName</h3>
 
         </div>
     </div>
+}
+
