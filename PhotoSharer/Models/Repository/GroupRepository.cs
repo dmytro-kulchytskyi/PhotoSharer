@@ -15,6 +15,33 @@ namespace PhotoSharer.Models.Repository
         {
             this.sessionFactory = sessionFactory;
         }
+        public IList<AppGroup> GetAll()
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var groups = session.QueryOver<AppGroup>().List();
+                return groups;
+            }
+        }
+        public IList<AppGroup> GetUserGroups(Guid UserId)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var groups = session.QueryOver<AppGroup>().Where(user=>user.Creator.Id==UserId).List();
+                return groups;
+         
+            }
+        }
+        public AppGroup GetGroupById(Guid Id)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var group = session.QueryOver<AppGroup>().Where(id => id.Id== Id).List().First();
+     
+                return group;
+
+            }
+        }
 
 
     }

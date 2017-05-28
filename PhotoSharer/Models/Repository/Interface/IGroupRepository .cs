@@ -8,6 +8,8 @@ namespace PhotoSharer.Models.Repository.Interface
 {
     public interface IGroupRepository : IRepository<AppGroup>
     {
-
+       IList<AppGroup> GetAll();
+       IList<AppGroup> GetUserGroups(Guid UserId);
+        AppGroup GetGroupById(Guid Id);
     }
 }

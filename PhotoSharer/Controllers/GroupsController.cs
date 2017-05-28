@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PhotoSharer.Identity;
 
 namespace PhotoSharer.Controllers
 {
@@ -19,11 +20,24 @@ namespace PhotoSharer.Controllers
         {
             this.groupRepository = groupRepository;
         }
-
         public ActionResult Index()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
+            return View(groupRepository.GetUserGroups(Guid.Parse(User.Identity.GetUserId())));
         }
+
+        [HttpGet]
+        public ActionResult View(Guid id)
+        {
+            if (!User.Identity.IsAuthenticated)return RedirectToAction("Login", "Account");
+            var group = groupRepository.GetGroupById(id);
+            return View(group);
+        }
+        
 
         [HttpGet]
         public ActionResult CreateGroup()

@@ -1,0 +1,41 @@
+﻿@model PhotoSharer.Models.AppGroup
+@{
+    ViewBag.Title = "Group List";
+}
+<h1>@ViewBag.UserName</h1>
+
+<div class="col-md-2">
+    <div class="list-group">
+        @Html.ActionLink("Group List", "Index", "Groups", new { @class = "list-group-item active" })
+        @Html.ActionLink("Create Group", "CreateGroup", "Groups", new { @class = "list-group-item" })
+
+    </div>
+</div>
+
+<div class="panel panel-default col-md-10 col-sm-12">
+        <div class="panel-heading">
+            <h3 class="panel-title">Group List</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr><th>Group Name</th> <th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    
+                        <tr>
+                            <th>@Model.Name</th>
+                            <td>
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#GetLink">
+                                    Get group link
+                                </button>
+                                <button type="button" class="btn btn-danger">Go out! <span class="glyphicon glyphicon-remove-circle"></span></button>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
