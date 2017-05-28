@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
 
-namespace PhotoSharer.MVC.Stores
+namespace PhotoSharer.Business.Stores
 {
     public class AppUserStore : IUserStore<AppUser, Guid>, IUserLoginStore<AppUser, Guid>, IUserLockoutStore<AppUser, Guid>, IUserTwoFactorStore<AppUser, Guid>
     {

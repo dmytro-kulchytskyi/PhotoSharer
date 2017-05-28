@@ -92,6 +92,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GroupsService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Stores\AppUserStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
