@@ -1,6 +1,26 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model IList<PhotoSharer.MVC.ViewModels.Groups.GroupListPageItemViewModel>
+@{
+    ViewBag.Title = "MyGroups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>My Groups</h2>
+
+@if (Model.Count == 0)
+{
+    <h3>No Groups</h3>
+}
+else
+{
+    <table class="table">
+        @foreach (var group in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(group.Name, "Group", new { Url = group.Url })
+                </td>
+            </tr>
+        }
+    </table>
+}
 

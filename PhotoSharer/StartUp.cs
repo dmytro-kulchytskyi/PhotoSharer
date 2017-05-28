@@ -1,7 +1,11 @@
-﻿using Microsoft.Owin;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
 using Owin;
-[assembly: OwinStartupAttribute(typeof(PhotoSharer.Startup))]
-namespace PhotoSharer
+using System.Configuration;
+
+[assembly: OwinStartup(typeof(PhotoSharer.Web.Startup))]
+namespace PhotoSharer.Web
 {
     public partial class Startup
     {
@@ -9,7 +13,5 @@ namespace PhotoSharer
         {
             ConfigureAuth(app);
         }
-
     }
-
 }

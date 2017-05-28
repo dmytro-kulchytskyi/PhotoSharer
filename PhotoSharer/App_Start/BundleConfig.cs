@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace PhotoSharer
+namespace PhotoSharer.Web.App_Start
 {
     public class BundleConfig
     {

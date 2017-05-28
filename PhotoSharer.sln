@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer", "PhotoSharer\PhotoSharer.csproj", "{F9ADB3DD-8A44-423C-9A1C-9CCFD333A273}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.Web", "PhotoSharer\PhotoSharer.Web.csproj", "{F9ADB3DD-8A44-423C-9A1C-9CCFD333A273}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.Business", "PhotoSharer.Business\PhotoSharer.Business.csproj", "{A1B62CAA-24E4-4769-B6D5-4996E68EE0B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.MVC", "PhotoSharer.MVC\PhotoSharer.MVC.csproj", "{CDF4B602-BF98-4EDB-B26F-B246809E5B0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.Nhibernate", "PhotoSharer.NHibernate\PhotoSharer.Nhibernate.csproj", "{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{F9ADB3DD-8A44-423C-9A1C-9CCFD333A273}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9ADB3DD-8A44-423C-9A1C-9CCFD333A273}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9ADB3DD-8A44-423C-9A1C-9CCFD333A273}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B62CAA-24E4-4769-B6D5-4996E68EE0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B62CAA-24E4-4769-B6D5-4996E68EE0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B62CAA-24E4-4769-B6D5-4996E68EE0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B62CAA-24E4-4769-B6D5-4996E68EE0B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDF4B602-BF98-4EDB-B26F-B246809E5B0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDF4B602-BF98-4EDB-B26F-B246809E5B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDF4B602-BF98-4EDB-B26F-B246809E5B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDF4B602-BF98-4EDB-B26F-B246809E5B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

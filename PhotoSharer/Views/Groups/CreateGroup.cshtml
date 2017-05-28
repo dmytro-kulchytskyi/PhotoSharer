@@ -1,4 +1,4 @@
-﻿@model PhotoSharer.Models.ViewModels.CreateGroup
+﻿@model PhotoSharer.MVC.ViewModels.Groups.CreateGroupViewModel
 
 @{
     ViewBag.Title = "CreateGroup";
@@ -6,10 +6,10 @@
 
 <h2>CreateGroup</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>CreateGroup</h4>
         <hr />
