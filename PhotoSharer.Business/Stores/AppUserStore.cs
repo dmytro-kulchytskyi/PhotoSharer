@@ -8,7 +8,11 @@ using PhotoSharer.Business.Repository;
 
 namespace PhotoSharer.Business.Stores
 {
-    public class AppUserStore : IUserStore<AppUser, Guid>, IUserLoginStore<AppUser, Guid>, IUserLockoutStore<AppUser, Guid>, IUserTwoFactorStore<AppUser, Guid>
+    public class AppUserStore : IUserStore<AppUser, Guid>,
+                                IUserLoginStore<AppUser, Guid>,
+                                IUserLockoutStore<AppUser, Guid>,
+                                IUserTwoFactorStore<AppUser, Guid>,
+                                IUserEmailStore<AppUser, Guid>
     {
         private IUserRepository userRepository;
         private ILoginRepository loginRepository;
@@ -82,15 +86,15 @@ namespace PhotoSharer.Business.Stores
                 loginRepository.Save(login);
             });
         }
-       
+
 
         public Task<AppUser> FindAsync(UserLoginInfo login)
         {
-            return Task.Run(() => 
+            return Task.Run(() =>
             {
                 var user = userRepository.GetByLoginInfo(login.LoginProvider, login.ProviderKey);
                 return user;
-            });  
+            });
         }
 
 
@@ -99,13 +103,13 @@ namespace PhotoSharer.Business.Stores
             return Task.Run(() =>
             {
                 var logins = loginRepository.GetByUserId(user.Id);
-                IList<UserLoginInfo> loginInfoList = logins.Select(login => 
+                IList<UserLoginInfo> loginInfoList = logins.Select(login =>
                     new UserLoginInfo(login.LoginProvider, login.ProviderKey)).ToList();
 
                 return loginInfoList;
             });
         }
-              
+
 
         public Task RemoveLoginAsync(AppUser user, UserLoginInfo loginInfo)
         {
@@ -119,7 +123,46 @@ namespace PhotoSharer.Business.Stores
             });
         }
 
+
+        public Task<AppUser> FindByEmailAsync(string email)
+        {
+            return Task.Run(() =>
+            {
+                var user = userRepository.GetByEmail(email);
+
+                return user;
+            });
+        }
+
+
+        public Task SetEmailAsync(AppUser user, string email)
+        {
+            user.Email = email;
+            return Task.FromResult(true);
+        }
+
+
+        public Task<string> GetEmailAsync(AppUser user)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+
+        public Task<bool> GetEmailConfirmedAsync(AppUser user)
+        {
+            //TODO
+            return Task.FromResult(true);
+        }
+
+
+        public Task SetEmailConfirmedAsync(AppUser user, bool confirmed)
+        {
+            //TODO
+            return Task.FromResult(true);
+        }
+
         
+
         public void Dispose()
         {
             userRepository = null;

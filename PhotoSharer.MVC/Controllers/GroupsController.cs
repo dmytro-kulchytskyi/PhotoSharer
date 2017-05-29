@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace PhotoSharer.MVC.Controllers
 {
+    [Authorize]
     public class GroupsController : Controller
     {
         private readonly IGroupRepository groupRepository;
@@ -23,7 +24,8 @@ namespace PhotoSharer.MVC.Controllers
             this.groupRepository = groupRepository;
         }
 
-        [Authorize]
+
+
         public ActionResult Index()
         {
                 var userId = Guid.Parse(User.Identity.GetUserId());
@@ -44,25 +46,26 @@ namespace PhotoSharer.MVC.Controllers
                 return View(groupsItemList);
         }
 
+
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Group(string url)
         {
             //TODO
             return Content(url);
         }
 
+
         [HttpGet]
-        [Authorize]
         public ActionResult CreateGroup()
         {
             return View();
         }
 
+
         [HttpPost]
-        [Authorize]
         public ActionResult CreateGroup(CreateGroupViewModel model)
         {
-
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -76,6 +79,5 @@ namespace PhotoSharer.MVC.Controllers
 
             return RedirectToAction("Index", "Groups");
         }
-
     }
 }

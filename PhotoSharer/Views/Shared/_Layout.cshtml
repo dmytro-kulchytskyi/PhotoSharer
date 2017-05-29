@@ -26,8 +26,9 @@
                     }
                     else
                     {
-                        <li><a href="@Url.Action("logoff", "account")">Log Out</a></li>
-                        <li><a href="@Url.Action("creategroup", "groups")">Create new group</a></li>
+                        <li><a href="@Url.Action("LogOff", "Account")">Log Out</a></li>
+                        <li><a href="@Url.Action("CreateGroup", "Groups")">Create new group</a></li>
+                        <li><a href="@Url.Action("Index", "Groups")">Hello @Session["FullName"]</a></li>
                     }
                 </ul>
             </div>

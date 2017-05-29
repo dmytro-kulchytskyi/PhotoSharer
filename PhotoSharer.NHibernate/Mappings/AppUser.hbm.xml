@@ -8,6 +8,7 @@
     </id>
     
     <property name="UserName" not-null="true" />
+    <property name="FullName" not-null="false" />
     <property name="Email" not-null="true" />
 
     <bag name="Groups" table="User_Group" cascade="save-update" lazy="true">

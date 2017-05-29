@@ -18,11 +18,12 @@ namespace PhotoSharer.MVC
                 url: "{language}/Group/{url}",
                 constraints: new
                 {
-                    language = @".+-.+"
+                    language = @"\w\w(-\w\w)?" //"ru-ru" or "ru"
                 },
                 defaults: new
                 {
                     controller = "Groups",
+                    language = "en-en",
                     action = "Group",
                 }
             );
@@ -32,7 +33,7 @@ namespace PhotoSharer.MVC
                 url: "{language}/{controller}/{action}/{id}",
                 constraints: new
                 {
-                    language = @".+-.+"
+                    language = @"\w\w(-\w\w)?"  //"ru-ru" or "ru"
                 },
                 defaults: new
                 {
@@ -42,7 +43,7 @@ namespace PhotoSharer.MVC
                     id = UrlParameter.Optional,
                 }
             );
-
+            
             routes.MapRoute(
              name: "Group",
                 url: "Group/{url}",
@@ -62,7 +63,7 @@ namespace PhotoSharer.MVC
                     action = "Index",
                     id = UrlParameter.Optional,
                 }
-            );
+            ); 
         }
     }
 }

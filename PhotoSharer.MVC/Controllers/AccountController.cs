@@ -34,13 +34,9 @@ namespace PhotoSharer.MVC.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Login()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Groups");
-            }
-
             return View();
         }
 
@@ -69,6 +65,17 @@ namespace PhotoSharer.MVC.Controllers
 
             // Sign in the user with this external login provider if the user already has a login
             var result = await signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+
+            if (loginInfo.ExternalIdentity != null &&
+                !string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
+            {
+                Session["FullName"] = loginInfo.ExternalIdentity.Name;
+            }
+            else if (!string.IsNullOrEmpty(loginInfo.Email))
+            {
+                Session["FullName"] = loginInfo.Email;
+            }
+
             switch (result)
             {
                 case SignInStatus.Success:
@@ -101,7 +108,17 @@ namespace PhotoSharer.MVC.Controllers
                     return View("ExternalLoginFailure");
                 }
 
-                var user = new AppUser { UserName = model.Email, Email = model.Email };
+                if (info.ExternalIdentity != null &&
+                    !string.IsNullOrEmpty(info.ExternalIdentity.Name))
+                {
+                    Session["FullName"] = info.ExternalIdentity.Name;
+                }
+                else
+                {
+                    Session["FullName"] = model.Email;
+                }
+
+                var user = new AppUser { UserName = model.Email, Email = model.Email, FullName = info.ExternalIdentity.Name };
                 var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -151,12 +168,14 @@ namespace PhotoSharer.MVC.Controllers
         {
             private readonly string XsrfKey = "XsrfKey";
 
-                //System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
+            //System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
 
             public ChallengeResult(string provider, string redirectUri)
                 : this(provider, redirectUri, null)
             {
             }
+
+
             public ChallengeResult(string provider, string redirectUri, string userId)
             {
                 LoginProvider = provider;
@@ -177,11 +196,7 @@ namespace PhotoSharer.MVC.Controllers
                 }
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
-
-
         }
-
-
         #endregion
     }
 }
