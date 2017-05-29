@@ -6,6 +6,5 @@ namespace PhotoSharer.Business.Repository
     {
         AppUser GetByUserName(string userName);
         AppUser GetByLoginInfo(string loginProvider, string providerKey);
-        AppUser GetByEmail(string email);
     }
 }

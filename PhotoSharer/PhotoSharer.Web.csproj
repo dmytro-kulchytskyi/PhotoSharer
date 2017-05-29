@@ -196,6 +196,7 @@
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Properties.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Account\AddAccount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

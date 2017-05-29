@@ -7,12 +7,12 @@
       <generator class="guid" />
     </id>
 
-    <property name="Description" />
-    <property name="Source" />
-    <property name="ExternalId" />
-    <property name="Link" />
+    <property name="Description" not-null="false"/>
+    <property name="Source" not-null="true"/>
+    <property name="ExternalId" not-null="true"/>
+    <property name="Link" not-null="true" />
 
-    <many-to-one name="User" class="AppUser" column="UserId" cascade="save-update" />
+    <many-to-one name="User" class="AppUser" column="UserId" not-null="true" cascade="save-update" />
 
   </class>
 </hibernate-mapping>

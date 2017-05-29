@@ -1,12 +1,11 @@
 ﻿@{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Add Account";
 }
-
 <h2>@ViewBag.Title.</h2>
-<div class="row"> 
+<div class="row">
     <div class="col-md-4">
         <section id="socialLoginForm">
-            <h4>Use external service to log in.</h4>
+            <h4>Add another account to your profile.</h4>
             <hr />
             @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
         </section>

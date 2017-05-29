@@ -8,6 +8,10 @@ using PhotoSharer.Business.Entities;
 using PhotoSharer.MVC.ViewModels.Account;
 using System.Web;
 using PhotoSharer.Business.Managers;
+using System.Security.Claims;
+using System.Linq;
+using PhotoSharer.Business.Stores;
+using PhotoSharer.Business.Services;
 
 namespace PhotoSharer.MVC.Controllers
 {
@@ -16,12 +20,16 @@ namespace PhotoSharer.MVC.Controllers
         private readonly IAuthenticationManager authenticationManager;
         private readonly SignInManager<AppUser, Guid> signInManager;
         private readonly AppUserManager userManager;
+        private readonly UserService userService;
+
 
         public AccountController(
             IAuthenticationManager authenticationManager,
             SignInManager<AppUser, Guid> signInManager,
-            AppUserManager userManager)
+            AppUserManager userManager,
+            UserService userService)
         {
+            this.userService = userService;
             this.authenticationManager = authenticationManager;
             this.signInManager = signInManager;
             this.userManager = userManager;
@@ -33,29 +41,41 @@ namespace PhotoSharer.MVC.Controllers
             return View();
         }
 
+
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("AddAccount");
+            }
+
             return View();
         }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult AddAccount()
+        {
+            return View();
+        }
+
+
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Groups");
-            }
-
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
+
 
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
+
             var loginInfo = await authenticationManager.GetExternalLoginInfoAsync();
 
             if (loginInfo == null)
@@ -63,32 +83,54 @@ namespace PhotoSharer.MVC.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
-            var result = await signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            if (!User.Identity.IsAuthenticated)
+            {
+                var result = await signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
 
-            if (loginInfo.ExternalIdentity != null &&
-                !string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
-            {
-                Session["FullName"] = loginInfo.ExternalIdentity.Name;
-            }
-            else if (!string.IsNullOrEmpty(loginInfo.Email))
-            {
-                Session["FullName"] = loginInfo.Email;
-            }
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        {
+                            return RedirectToLocal(returnUrl);
+                        }
+                    case SignInStatus.Failure:
+                    default:
+                        {
+                            var userName = string.Empty;
 
-            switch (result)
+                            if (loginInfo.ExternalIdentity != null &&
+                               !string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
+                            {
+                                userName = loginInfo.ExternalIdentity.Name;
+                            }
+
+                            var user = await userService.CreateUserAsync(userName);
+                            if (user != null)
+                            {
+                                var addLoginResult = await userManager.AddLoginAsync(user.Id, loginInfo.Login);
+                                if (addLoginResult.Succeeded)
+                                {
+                                    await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                    return RedirectToLocal(returnUrl);
+                                }
+                            }
+                            return RedirectToAction("Index", "Groups");
+                        }
+                }
+            }
+            else
             {
-                case SignInStatus.Success:
+                var result = await userManager.AddLoginAsync(Guid.Parse(User.Identity.GetUserId()), loginInfo.Login);
+                if (result.Succeeded)
+                {
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.Failure:
-                default:
-                    // If the user does not have an account, then prompt the user to create an account
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
+                }
+                return RedirectToAction("Index", "Groups");
             }
         }
 
+
+        /*
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -108,17 +150,20 @@ namespace PhotoSharer.MVC.Controllers
                     return View("ExternalLoginFailure");
                 }
 
+                string fullName;
                 if (info.ExternalIdentity != null &&
                     !string.IsNullOrEmpty(info.ExternalIdentity.Name))
                 {
-                    Session["FullName"] = info.ExternalIdentity.Name;
+                    fullName = info.ExternalIdentity.Name;
                 }
                 else
                 {
-                    Session["FullName"] = model.Email;
+                    fullName = model.Email;
                 }
 
-                var user = new AppUser { UserName = model.Email, Email = model.Email, FullName = info.ExternalIdentity.Name };
+                Session["FullName"] = fullName;
+
+                var user = new AppUser { UserName = model.Email, Email = model.Email, FullName = fullName };
                 var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -135,6 +180,8 @@ namespace PhotoSharer.MVC.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
+        */
+
 
         [Authorize]
         public ActionResult LogOff()

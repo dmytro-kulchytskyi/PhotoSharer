@@ -35,7 +35,7 @@ namespace PhotoSharer.MVC.Controllers
                 {
                     groups = new List<AppGroup>(0);
                 }
-
+                //((System.Security.Claims.ClaimsIdentity)HttpContext.User.Identity).AddClaim(new System.Security.Claims.Claim())
                 var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
                 {
                     Name = group.Name,

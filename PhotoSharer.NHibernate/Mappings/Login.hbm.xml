@@ -10,7 +10,7 @@
     <property name="LoginProvider" not-null="true" />
     <property name="ProviderKey" not-null="true" />
 
-    <many-to-one name="User" class="AppUser" column="UserId" cascade="save-update" />
+    <many-to-one name="User" class="AppUser" column="UserId" not-null="true" cascade="save-update" />
 
   </class>
 </hibernate-mapping>

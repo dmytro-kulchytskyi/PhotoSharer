@@ -16,19 +16,26 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Home", "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.ActionLink("Hello " + User.Identity.Name, "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else
+                {
+                    @Html.ActionLink("Home", "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li><a href="@Url.Action("login", "account")">Login</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {    
+                        <li>@Html.ActionLink("Add Account", "AddAccount", "Account")</li>
+                        <li>@Html.ActionLink("Create new group", "CreateGroup", "Groups")</li>
+                        <li>@Html.ActionLink("Log Out", "LogOff", "Account")</li>
                     }
                     else
                     {
-                        <li><a href="@Url.Action("LogOff", "Account")">Log Out</a></li>
-                        <li><a href="@Url.Action("CreateGroup", "Groups")">Create new group</a></li>
-                        <li><a href="@Url.Action("Index", "Groups")">Hello @Session["FullName"]</a></li>
+                        <li>@Html.ActionLink("Log In", "Login", "Account")</li>
                     }
                 </ul>
             </div>

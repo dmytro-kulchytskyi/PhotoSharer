@@ -11,7 +11,7 @@ namespace PhotoSharer.Nhibernate.Repository
     {
         private ISessionFactory sessionFactory;
 
-        public UserRepository(ISessionFactory sessionFactory) 
+        public UserRepository(ISessionFactory sessionFactory)
             : base(sessionFactory)
         {
             this.sessionFactory = sessionFactory;
@@ -37,17 +37,6 @@ namespace PhotoSharer.Nhibernate.Repository
                 var user = session.Query<Login>()
                     .Where(login => login.LoginProvider == loginProvider && login.ProviderKey == providerKey)
                         .Select(login => login.User).SingleOrDefault();
-
-                return user;
-            }
-        }
-
-
-        public AppUser GetByEmail(string email)
-        {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var user = session.QueryOver<AppUser>().Where(_user => _user.Email == email).SingleOrDefault();
 
                 return user;
             }

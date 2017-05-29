@@ -100,6 +100,7 @@ namespace PhotoSharer.Web.App_Start
 
             kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
             kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
+
         }
     }
 }

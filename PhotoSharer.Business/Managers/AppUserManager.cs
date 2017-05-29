@@ -13,17 +13,7 @@ namespace PhotoSharer.Business.Managers
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = false
             };
-
-            // Configure validation logic for passwords
-            PasswordValidator = new PasswordValidator
-            {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = true,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true
-            };
-
+            
             UserLockoutEnabledByDefault = false;
         }      
     }

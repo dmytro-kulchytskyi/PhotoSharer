@@ -11,8 +11,7 @@ namespace PhotoSharer.Business.Stores
     public class AppUserStore : IUserStore<AppUser, Guid>,
                                 IUserLoginStore<AppUser, Guid>,
                                 IUserLockoutStore<AppUser, Guid>,
-                                IUserTwoFactorStore<AppUser, Guid>,
-                                IUserEmailStore<AppUser, Guid>
+                                IUserTwoFactorStore<AppUser, Guid>
     {
         private IUserRepository userRepository;
         private ILoginRepository loginRepository;
@@ -65,11 +64,7 @@ namespace PhotoSharer.Business.Stores
 
         public Task<AppUser> FindByNameAsync(string userName)
         {
-            return Task.Run(() =>
-            {
-                var user = userRepository.GetByUserName(userName);
-                return user;
-            });
+            return Task.FromResult<AppUser>(null);
         }
 
 
@@ -123,45 +118,6 @@ namespace PhotoSharer.Business.Stores
             });
         }
 
-
-        public Task<AppUser> FindByEmailAsync(string email)
-        {
-            return Task.Run(() =>
-            {
-                var user = userRepository.GetByEmail(email);
-
-                return user;
-            });
-        }
-
-
-        public Task SetEmailAsync(AppUser user, string email)
-        {
-            user.Email = email;
-            return Task.FromResult(true);
-        }
-
-
-        public Task<string> GetEmailAsync(AppUser user)
-        {
-            return Task.FromResult(user.Email);
-        }
-
-
-        public Task<bool> GetEmailConfirmedAsync(AppUser user)
-        {
-            //TODO
-            return Task.FromResult(true);
-        }
-
-
-        public Task SetEmailConfirmedAsync(AppUser user, bool confirmed)
-        {
-            //TODO
-            return Task.FromResult(true);
-        }
-
-        
 
         public void Dispose()
         {

@@ -12,8 +12,7 @@
     <property name="Url" not-null="true" />
     <property name="CreatorId" not-null="true" />
 
-
-    <bag name="Users" table="User_Group"  cascade="save-update" >
+    <bag name="Users" table="User_Group" cascade="save-update" >
       <key column="GroupId"/>
       <many-to-many class="AppUser" column="UserId"/>
     </bag>
