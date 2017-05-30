@@ -87,6 +87,7 @@ namespace PhotoSharer.Business.Stores
         {
             return Task.Run(() =>
             {
+                if (login == null) return null;
                 var user = userRepository.GetByLoginInfo(login.LoginProvider, login.ProviderKey);
                 return user;
             });
@@ -108,14 +109,7 @@ namespace PhotoSharer.Business.Stores
 
         public Task RemoveLoginAsync(AppUser user, UserLoginInfo loginInfo)
         {
-            return Task.Run(() =>
-            {
-                var login = loginRepository.GetByLoginInfo(user.Id, loginInfo.LoginProvider, loginInfo.ProviderKey);
-                if (login != null)
-                {
-                    loginRepository.Delete(login);
-                }
-            });
+            return Task.FromResult(true);
         }
 
 

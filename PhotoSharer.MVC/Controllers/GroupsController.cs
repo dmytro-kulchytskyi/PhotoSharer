@@ -14,11 +14,11 @@ namespace PhotoSharer.MVC.Controllers
     public class GroupsController : Controller
     {
         private readonly IGroupRepository groupRepository;
-        private readonly GroupsService groupsService;
+        private readonly GroupsManager groupsService;
 
         public GroupsController(
             IGroupRepository groupRepository,
-            GroupsService groupsService)
+            GroupsManager groupsService)
         {
             this.groupsService = groupsService;
             this.groupRepository = groupRepository;

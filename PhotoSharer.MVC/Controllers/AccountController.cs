@@ -34,7 +34,6 @@ namespace PhotoSharer.MVC.Controllers
         }
 
 
-
         public ActionResult Properties()
         {
             return View();
@@ -80,8 +79,9 @@ namespace PhotoSharer.MVC.Controllers
             {
                 return RedirectToAction("Login");
             }
-            
-            var userExid = loginInfo.ExternalIdentity.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
+
+
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -97,21 +97,38 @@ namespace PhotoSharer.MVC.Controllers
                     default:
                         {
                             var userName = string.Empty;
-
-                            if (loginInfo.ExternalIdentity != null &&
-                               !string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
+                            if (loginInfo.ExternalIdentity != null)
                             {
-                                userName = loginInfo.ExternalIdentity.Name;
-                            }
-
-                            var user = await userService.CreateUserAsync(userName);
-                            if (user != null)
-                            {
-                                var addLoginResult = await userManager.AddLoginAsync(user.Id, loginInfo.Login);
-                                if (addLoginResult.Succeeded)
+                                if (!string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
                                 {
-                                    await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                                    return RedirectToLocal(returnUrl);
+                                    userName = loginInfo.ExternalIdentity.Name;
+                                }
+
+
+                                if (loginInfo.ExternalIdentity.Claims != null && loginInfo.ExternalIdentity.Claims.Count() > 0)
+                                {
+                                    var userExternalIdClaim = loginInfo.ExternalIdentity.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+                                    if (userExternalIdClaim != null)
+                                    {
+                                        var userExternalId = userExternalIdClaim.Value;
+                                        if (!string.IsNullOrEmpty(userExternalId))
+                                        {
+                                            //TODO
+                                            //add search by externalId and update providerKey(token)
+
+
+                                            var user = await userService.SaveUserAsync(userName);
+                                            if (user != null)
+                                            {
+                                                var addLoginResult = await userManager.AddLoginAsync(user.Id, loginInfo.Login);
+                                                if (addLoginResult.Succeeded)
+                                                {
+                                                    await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                                                    return RedirectToLocal(returnUrl);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             return RedirectToAction("Index", "Groups");

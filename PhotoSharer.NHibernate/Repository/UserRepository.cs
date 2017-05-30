@@ -41,5 +41,6 @@ namespace PhotoSharer.Nhibernate.Repository
                 return user;
             }
         }
+   
     }
 }

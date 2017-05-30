@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.Web", "PhotoSharer\PhotoSharer.Web.csproj", "{F9ADB3DD-8A44-423C-9A1C-9CCFD333A273}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -15,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.MVC", "PhotoSharer.MVC\PhotoSharer.MVC.csproj", "{CDF4B602-BF98-4EDB-B26F-B246809E5B0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.Nhibernate", "PhotoSharer.NHibernate\PhotoSharer.Nhibernate.csproj", "{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoSharer.UserService", "PhotoSharer.UserService\PhotoSharer.UserService.csproj", "{28589657-852B-4F5B-B95D-6C375591D0A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C9E0832-5697-4FEE-A1AD-26A1F80D5B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28589657-852B-4F5B-B95D-6C375591D0A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28589657-852B-4F5B-B95D-6C375591D0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28589657-852B-4F5B-B95D-6C375591D0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28589657-852B-4F5B-B95D-6C375591D0A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,8 +17,6 @@ namespace PhotoSharer.Web.App_Start
     using PhotoSharer.Nhibernate.Repository;
     using PhotoSharer.Business.Repository;
     using PhotoSharer.Business.Entities;
-    using PhotoSharer.Business.Managers;
-    using PhotoSharer.Business.Stores;
 
     public static class NinjectWebCommon
     {
@@ -90,15 +88,16 @@ namespace PhotoSharer.Web.App_Start
 
             }).InSingletonScope();
 
+
             kernel.Bind<IAuthenticationManager>().ToMethod(_ => HttpContext.Current.GetOwinContext().Authentication);
 
             kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<IGroupRepository>().To<GroupRepository>();
             kernel.Bind<ILoginRepository>().To<LoginRepository>();
 
-            kernel.Bind<IUserStore<AppUser, Guid>>().To<AppUserStore>();
+          //  kernel.Bind<IUserStore<AppUser, Guid>>().To<AppUserStore>();
 
-            kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
+           // kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
             kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
 
         }
