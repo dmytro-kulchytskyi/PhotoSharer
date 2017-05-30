@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Managers;
+using PhotoSharer.Business.Repository;
 using System;
 using System.Threading.Tasks;
 using System.Web;
@@ -8,10 +10,10 @@ using System.Web;
 namespace PhotoSharer.Business.Services
 {
 
-    public class UserService<TUser, TUserId, TLogin>
+    public class UserService : IUserService
     {
-        //  private readonly IUserRepository userRepository;
-        //  private readonly ILoginRepository loginRepository;
+        private readonly IUserRepository userRepository;
+        private readonly ILoginRepository loginRepository;
         private readonly AppUserManager userManager;
 
 
@@ -63,7 +65,12 @@ namespace PhotoSharer.Business.Services
             throw new NotImplementedException();
         }
 
-        public static bool IsAuthenticated
+        public void SingOut()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAuthenticated
         {
             get
             {
@@ -81,7 +88,7 @@ namespace PhotoSharer.Business.Services
             }
         }
 
-        public static string UserName
+        public string UserName
         {
             get
             {
@@ -103,7 +110,7 @@ namespace PhotoSharer.Business.Services
             }
         }
 
-        public static Guid GetUserId()
+        public Guid GetUserId()
         {
             var context = HttpContext.Current;
             if (context != null)
@@ -124,6 +131,6 @@ namespace PhotoSharer.Business.Services
             }
 
             return Guid.Empty;
-        }
+        }      
     }
 }

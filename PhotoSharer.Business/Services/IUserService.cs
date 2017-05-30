@@ -12,6 +12,7 @@ namespace PhotoSharer.Business.Services
         Task<AppUser> UpdateUserAsync(string externalId, Login loginInfo);
         Task<bool> AddLoginAsync(Guid userid, Login login);
         Task<Login> GetlLoginInfoAsync();
+        void SingOut();
         bool IsAuthenticated { get;  }
         string UserName { get; }
 

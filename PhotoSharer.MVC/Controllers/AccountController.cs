@@ -2,14 +2,12 @@
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNet.Identity;
 using PhotoSharer.Business.Entities;
 using System.Web;
-using PhotoSharer.Business.Managers;
-using PhotoSharer.Business.Services;
 using System.Linq;
 using System.Security.Claims;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PhotoSharer.MVC.Controllers
 {
@@ -39,6 +37,7 @@ namespace PhotoSharer.MVC.Controllers
             return View();
         }
 
+        
 
         [HttpGet]
         [AllowAnonymous]
@@ -157,9 +156,9 @@ namespace PhotoSharer.MVC.Controllers
         #region Helpers
         //---
 
-        private void AddErrors(IdentityResult result)
+        private void AddErrors(IEnumerable<string> errors)
         {
-            foreach (var error in result.Errors)
+            foreach (var error in errors)
             {
                 ModelState.AddModelError("", error);
             }
