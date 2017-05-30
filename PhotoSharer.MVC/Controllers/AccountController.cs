@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using PhotoSharer.Business.Entities;
-using PhotoSharer.MVC.ViewModels.Account;
 using System.Web;
 using PhotoSharer.Business.Managers;
-using System.Security.Claims;
-using System.Linq;
-using PhotoSharer.Business.Stores;
 using PhotoSharer.Business.Services;
 
 namespace PhotoSharer.MVC.Controllers
@@ -36,6 +32,7 @@ namespace PhotoSharer.MVC.Controllers
         }
 
 
+
         public ActionResult Properties()
         {
             return View();
@@ -54,13 +51,13 @@ namespace PhotoSharer.MVC.Controllers
             return View();
         }
 
+
         [HttpGet]
         [Authorize]
         public ActionResult AddAccount()
         {
             return View();
         }
-
 
 
         [HttpPost]
@@ -75,7 +72,6 @@ namespace PhotoSharer.MVC.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-
             var loginInfo = await authenticationManager.GetExternalLoginInfoAsync();
 
             if (loginInfo == null)
@@ -130,59 +126,6 @@ namespace PhotoSharer.MVC.Controllers
         }
 
 
-        /*
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Groups");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // Get the information about the user from the external login provider
-                var info = await authenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-
-                string fullName;
-                if (info.ExternalIdentity != null &&
-                    !string.IsNullOrEmpty(info.ExternalIdentity.Name))
-                {
-                    fullName = info.ExternalIdentity.Name;
-                }
-                else
-                {
-                    fullName = model.Email;
-                }
-
-                Session["FullName"] = fullName;
-
-                var user = new AppUser { UserName = model.Email, Email = model.Email, FullName = fullName };
-                var result = await userManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await userManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                    }
-                }
-                AddErrors(result);
-            }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
-        }
-        */
-
-
         [Authorize]
         public ActionResult LogOff()
         {
@@ -213,9 +156,7 @@ namespace PhotoSharer.MVC.Controllers
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
-            private readonly string XsrfKey = "XsrfKey";
-
-            //System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
+            private readonly string XsrfKey = System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
 
             public ChallengeResult(string provider, string redirectUri)
                 : this(provider, redirectUri, null)
