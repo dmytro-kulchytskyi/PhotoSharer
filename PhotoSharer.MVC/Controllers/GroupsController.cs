@@ -74,7 +74,7 @@ namespace PhotoSharer.MVC.Controllers
             var url = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
             if (url != null)
             {
-                return RedirectToRoute("Group", new { url = url });
+                return RedirectToAction("Group","Groups", new { url = url });
             }
 
             return RedirectToAction("Index", "Groups");
