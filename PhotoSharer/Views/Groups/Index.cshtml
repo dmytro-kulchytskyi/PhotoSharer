@@ -12,15 +12,17 @@
 }
 else
 {
-    <table class="table">
+    <div class="list-group">
         @foreach (var group in Model)
-        {
-            <tr>
-                <td>
-                    @Html.ActionLink(group.Name, "Group", new { Url = group.Url })
-                </td>
-            </tr>
+                {
+            <button type="button" class="list-group-item-success">
+                <h4>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</h4>
+                <hr>
+                @group.Url
+            </button>
+
         }
-    </table>
+    </div>
 }
+
 
