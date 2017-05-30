@@ -8,6 +8,8 @@ using PhotoSharer.Business.Entities;
 using System.Web;
 using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Services;
+using System.Linq;
+using System.Security.Claims;
 
 namespace PhotoSharer.MVC.Controllers
 {
@@ -78,6 +80,8 @@ namespace PhotoSharer.MVC.Controllers
             {
                 return RedirectToAction("Login");
             }
+            
+            var userExid = loginInfo.ExternalIdentity.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             if (!User.Identity.IsAuthenticated)
             {
