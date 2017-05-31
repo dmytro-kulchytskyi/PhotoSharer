@@ -7,7 +7,7 @@ namespace PhotoSharer.MVC
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            //filters.Add(new LanguageActionFilter());
+            filters.Add(new LanguageActionFilter());
         }
     }
 }

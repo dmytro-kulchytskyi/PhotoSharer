@@ -80,8 +80,6 @@ namespace PhotoSharer.MVC.Controllers
             {
                 return RedirectToAction("Login");
             }
-            
-            var userExid = loginInfo.ExternalIdentity.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -105,6 +103,7 @@ namespace PhotoSharer.MVC.Controllers
                             }
 
                             var user = await userService.CreateUserAsync(userName);
+
                             if (user != null)
                             {
                                 var addLoginResult = await userManager.AddLoginAsync(user.Id, loginInfo.Login);
