@@ -22,19 +22,19 @@ namespace PhotoSharer.Business.Services
             return groupRepository.GetByUserId(userId);
         }
 
-        public string CreateGroup(string groupName, Guid creatorId)
+        public AppGroup CreateGroup(string groupName, Guid creatorId)
         {
             var creator = userService.GetById(creatorId);
             if (creator == null)
             {
                 return null;
             }
-
+            Guid guid = Guid.NewGuid();
             AppGroup group = new AppGroup()
             {
                 Name = groupName,
-                InviteCode = Guid.NewGuid().ToString(),
-                Url = Guid.NewGuid().ToString(),
+                InviteCode = guid.ToString(),
+                Url = guid.ToString(),
                 CreatorId = creatorId
             };
 
@@ -46,7 +46,7 @@ namespace PhotoSharer.Business.Services
                 return null;
             }
 
-            return group.Url;
+            return group;
         }
 
         public bool AddUserToGroup(Guid userId, string groupUrl)

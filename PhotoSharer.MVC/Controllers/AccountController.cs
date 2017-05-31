@@ -8,6 +8,8 @@ using PhotoSharer.Business.Entities;
 using System.Web;
 using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Services;
+using System.Linq;
+using System.Security.Claims;
 
 namespace PhotoSharer.MVC.Controllers
 {
@@ -101,6 +103,7 @@ namespace PhotoSharer.MVC.Controllers
                             }
 
                             var user = await userService.CreateUserAsync(userName);
+
                             if (user != null)
                             {
                                 var addLoginResult = await userManager.AddLoginAsync(user.Id, loginInfo.Login);

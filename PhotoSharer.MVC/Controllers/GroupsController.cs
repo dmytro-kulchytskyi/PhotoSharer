@@ -28,22 +28,22 @@ namespace PhotoSharer.MVC.Controllers
 
         public ActionResult Index()
         {
-                var userId = Guid.Parse(User.Identity.GetUserId());
-                var groups = groupsService.GetUserGroups(userId);
+            var userId = Guid.Parse(User.Identity.GetUserId());
+            var groups = groupsService.GetUserGroups(userId);
 
-                if (groups == null)
-                {
-                    groups = new List<AppGroup>(0);
-                }
-                //((System.Security.Claims.ClaimsIdentity)HttpContext.User.Identity).AddClaim(new System.Security.Claims.Claim())
-                var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
-                {
-                    Name = group.Name,
-                    InviteCode = group.InviteCode,
-                    Url = group.Url
-                }).ToList();
+            if (groups == null)
+            {
+                groups = new List<AppGroup>(0);
+            }
+            //((System.Security.Claims.ClaimsIdentity)HttpContext.User.Identity).AddClaim(new System.Security.Claims.Claim())
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            {
+                Name = group.Name,
+                InviteCode = group.InviteCode,
+                Url = group.Url
+            }).ToList();
 
-                return View(groupsItemList);
+            return View(groupsItemList);
         }
 
 
@@ -79,7 +79,7 @@ namespace PhotoSharer.MVC.Controllers
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
             if (group != null)
             {
-                return RedirectToAction("Group","Groups", new { url = group });
+                return RedirectToAction("Group", "Groups", new { url = group });
             }
 
             return RedirectToAction("Index", "Groups");

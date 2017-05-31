@@ -3,39 +3,67 @@
     ViewBag.Title = "MyGroups";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <h2>My Groups</h2>
 
 @if (Model.Count == 0)
 {
     <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
 }
-else
-{<div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Group List</h3>
-        </div>
-        <div class="panel-body">
-            <table class="table table-hover">
-                <thead>
-                    <tr><th>Group Name</th> <th>Actions</th></tr>
-                </thead>
-                <tbody>
-                    @foreach (var group in Model)
-                    {
-                        <tr>
-                            <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
-                            <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#GetLink">
-                                    Get group link
-                                </button>
-                                <button type="button" class="btn btn-danger">Go out! <span class="glyphicon glyphicon-remove-circle"></span></button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+else { 
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Group List</h3>
     </div>
+    <div class="panel-body">
+        <table class="table table-hover" id="table">
+            <tbody>
+                @foreach (var group in Model)
+                {
+                    <tr>
+                        <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
+                        <td>
+                            <button url="@group.Url" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Copy group link</button>
+                            <input type="text" style='width:100em' disabled value="@Url.Action("Group", "Groups", new { Url = group.Url }, "http")">
+                        </td>
+                    </tr>
 
-
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 }
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Link was successfully copied</h4>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#table').on('click', 'button', function () {
+            var url = $(this).parent().find('input[type=text]').val();
+            copyToClipboard(url);
+        });
+    });
+
+
+    function copyToClipboard(url) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(url).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+</script>
+
+
