@@ -29,12 +29,12 @@ namespace PhotoSharer.Business.Services
             {
                 return null;
             }
-
+            Guid guid = Guid.NewGuid();
             AppGroup group = new AppGroup()
             {
                 Name = groupName,
-                InviteCode = Guid.NewGuid().ToString(),
-                Url = Guid.NewGuid().ToString(),
+                InviteCode = guid.ToString(),
+                Url = guid.ToString(),
                 CreatorId = creatorId
             };
 

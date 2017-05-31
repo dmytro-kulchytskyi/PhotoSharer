@@ -3,39 +3,56 @@
     ViewBag.Title = "MyGroups";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .textBox {
+        height: 30px;
+        width: 400px;
+    }
+    p {
+        color: #000000;
+        font-size: 20px;
+        display: none;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
 <h2>My Groups</h2>
 
 @if (Model.Count == 0)
 {
     <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
 }
-else
-{<div class="panel panel-default">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Group List</h3>
         </div>
         <div class="panel-body">
             <table class="table table-hover">
-                <thead>
-                    <tr><th>Group Name</th> <th>Actions</th></tr>
-                </thead>
                 <tbody>
                     @foreach (var group in Model)
                     {
                         <tr>
                             <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
                             <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#GetLink">
-                                    Get group link
-                                </button>
-                                <button type="button" class="btn btn-danger">Go out! <span class="glyphicon glyphicon-remove-circle"></span></button>
+                                <p id="@group.Url">@group.InviteCode</p>
+                                <button onclick="copyToClipboard('#@group.Url')" class ="btn btn-primary">Скопировать ссылку</button>
+                                <button type="button" class="btn btn-danger">Leave group <span class="glyphicon glyphicon-remove-circle"></span></button>
                             </td>
                         </tr>
+                        
                     }
                 </tbody>
             </table>
         </div>
     </div>
+<script>
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+</script>
 
 
-}

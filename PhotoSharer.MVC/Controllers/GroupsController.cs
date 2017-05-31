@@ -39,7 +39,7 @@ namespace PhotoSharer.MVC.Controllers
                 var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
                 {
                     Name = group.Name,
-                    InviteCode = group.InviteCode,
+                    InviteCode = "http://photosharer.azurewebsites.net/en-en/Group/"+group.InviteCode,
                     Url = group.Url
                 }).ToList();
 
