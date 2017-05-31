@@ -92,7 +92,7 @@ namespace PhotoSharer.Web.App_Start
 
             kernel.Bind<IAuthenticationManager>().ToMethod(_ => HttpContext.Current.GetOwinContext().Authentication);
 
-            kernel.Bind<IUserRepository>().To<UserRepository>();
+            kernel.Bind<IUserRepository>().To<userRepository>();
             kernel.Bind<IGroupRepository>().To<GroupRepository>();
             kernel.Bind<ILoginRepository>().To<LoginRepository>();
 

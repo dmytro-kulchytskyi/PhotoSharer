@@ -7,11 +7,11 @@ using PhotoSharer.Business.Repository;
 
 namespace PhotoSharer.Nhibernate.Repository
 {
-    public class UserRepository : Repository<AppUser>, IUserRepository
+    public class userRepository : Repository<AppUser>, IUserRepository
     {
         private ISessionFactory sessionFactory;
 
-        public UserRepository(ISessionFactory sessionFactory)
+        public userRepository(ISessionFactory sessionFactory)
             : base(sessionFactory)
         {
             this.sessionFactory = sessionFactory;

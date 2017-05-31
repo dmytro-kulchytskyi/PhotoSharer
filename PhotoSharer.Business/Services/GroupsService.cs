@@ -49,6 +49,11 @@ namespace PhotoSharer.Business.Services
             return group.Url;
         }
 
+        public bool AddUserToGroup(Guid userId, string groupUrl)
+        {
+
+            return groupRepository.AddUser(userId,groupUrl) ;
+        }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NHibernate;
+using NHibernate.Linq;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
 using System;
@@ -11,12 +12,39 @@ namespace PhotoSharer.Nhibernate.Repository
     {
         private ISessionFactory sessionFactory;
 
-        public GroupRepository(ISessionFactory sessionFactory) 
+        public GroupRepository(ISessionFactory sessionFactory)
             : base(sessionFactory)
         {
             this.sessionFactory = sessionFactory;
         }
 
+
+
+        public AppGroup GetByUrl(string groupUrl)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var group = session.QueryOver<AppGroup>().Where(url => url.Url == groupUrl).SingleOrDefault();
+                return group;
+            }
+
+        }
+
+
+        public bool AddUser(Guid userId, string groupUrl)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var groupId = session.Query<AppGroup>().Where(_group => _group.Url == groupUrl).Select(_group => _group.Id).SingleOrDefault();
+               if(session.CreateSQLQuery("SELECT* FROM User_Group Where GroupId=? AND UserId=?").SetParameter(0, groupId).SetParameter(1, userId).List().Count != 0)
+                {
+                    return false;
+                }
+                
+                session.CreateSQLQuery("INSERT INTO User_Group ( GroupId, UserId) VALUES (?,?)").SetParameter(0, groupId).SetParameter(1, userId).ExecuteUpdate();
+                return true;
+            }
+        }
 
 
         public IList<AppGroup> GetByUserId(Guid userId, int skip = 0, int take = 0)

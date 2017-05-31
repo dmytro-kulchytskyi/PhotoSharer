@@ -51,10 +51,15 @@ namespace PhotoSharer.MVC.Controllers
         [AllowAnonymous]
         public ActionResult Group(string url)
         {
-            //TODO
             return Content(url);
         }
 
+
+        public ActionResult JoinGroup(string groupUrl)
+        {
+            var result = groupsService.AddUserToGroup(Guid.Parse(User.Identity.GetUserId()), groupUrl);
+            return Content(result.ToString());
+        }
 
         [HttpGet]
         public ActionResult CreateGroup()
@@ -71,10 +76,10 @@ namespace PhotoSharer.MVC.Controllers
                 return View(model);
             }
 
-            var url = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
-            if (url != null)
+            var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
+            if (group != null)
             {
-                return RedirectToAction("Group","Groups", new { url = url });
+                return RedirectToAction("Group","Groups", new { url = group });
             }
 
             return RedirectToAction("Index", "Groups");
