@@ -3,19 +3,6 @@
     ViewBag.Title = "MyGroups";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
-    .textBox {
-        height: 30px;
-        width: 400px;
-    }
-
-    p {
-        color: #000000;
-        font-size: 20px;
-        display: none;
-    }
-</style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <h2>My Groups</h2>
 
@@ -23,6 +10,7 @@
 {
     <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
 }
+else { 
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Group List</h3>
@@ -35,8 +23,8 @@
                     <tr>
                         <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
                         <td>
-                            <input type="text" disabled value="@Url.Action("Group", "Groups", new { Url = group.Url }, "http")">
-                            <button url="@group.Url" class="btn btn-primary">Скопировать ссылку</button>
+                            <button url="@group.Url" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Copy group link</button>
+                            <input type="text" style='width:100em' disabled value="@Url.Action("Group", "Groups", new { Url = group.Url }, "http")">
                         </td>
                     </tr>
 
@@ -45,6 +33,21 @@
         </table>
     </div>
 </div>
+}
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Link was successfully copied</h4>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
         $('#table').on('click', 'button', function () {
