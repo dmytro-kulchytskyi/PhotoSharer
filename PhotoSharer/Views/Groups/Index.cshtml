@@ -4,10 +4,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    input {
-        width: 800px;
+    .textBox {
+        height: 30px;
+        width: 400px;
+    }
+    p {
+        color: #000000;
+        font-size: 20px;
+        display: none;
     }
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <h2>My Groups</h2>
 
@@ -21,78 +28,31 @@
         </div>
         <div class="panel-body">
             <table class="table table-hover">
-                <thead>
-                    <tr><th>Group Name</th> <th>Actions</th></tr>
-                </thead>
                 <tbody>
                     @foreach (var group in Model)
                     {
                         <tr>
                             <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
                             <td>
-                                <input type="text" id="@group.Url" value="@group.InviteCode"> <button id="@group.InviteCode">Copy</button><br><br>
+                                <p id="@group.Url">@group.InviteCode</p>
+                                <button onclick="copyToClipboard('#@group.Url')" class ="btn btn-primary">Скопировать ссылку</button>
                                 <button type="button" class="btn btn-danger">Leave group <span class="glyphicon glyphicon-remove-circle"></span></button>
                             </td>
                         </tr>
-                        <script>
-    document.getElementById("@group.InviteCode").addEventListener("click", function () {
-        copyToClipboard(document.getElementById("@group.Url"));
-    });
-
-    function copyToClipboard(elem) {
-        // create hidden text element, if it doesn't already exist
-        var targetId = "_hiddenCopyText_";
-        var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
-        var origSelectionStart, origSelectionEnd;
-        if (isInput) {
-            // can just use the original source element for the selection and copy
-            target = elem;
-            origSelectionStart = elem.selectionStart;
-            origSelectionEnd = elem.selectionEnd;
-        } else {
-            // must use a temporary form element for the selection and copy
-            target = document.getElementById(targetId);
-            if (!target) {
-                var target = document.createElement("textarea");
-                target.style.position = "absolute";
-                target.style.left = "-9999px";
-                target.style.top = "0";
-                target.id = targetId;
-                document.body.appendChild(target);
-            }
-            target.textContent = elem.textContent;
-        }
-        // select the content
-        var currentFocus = document.activeElement;
-        target.focus();
-        target.setSelectionRange(0, target.value.length);
-
-        // copy the selection
-        var succeed;
-        try {
-            succeed = document.execCommand("copy");
-        } catch (e) {
-            succeed = false;
-        }
-        // restore original focus
-        if (currentFocus && typeof currentFocus.focus === "function") {
-            currentFocus.focus();
-        }
-
-        if (isInput) {
-            // restore prior selection
-            elem.setSelectionRange(origSelectionStart, origSelectionEnd);
-        } else {
-            // clear temporary content
-            target.textContent = "";
-        }
-        return succeed;
-    }
-                        </script>
+                        
                     }
                 </tbody>
             </table>
         </div>
     </div>
+<script>
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+</script>
 
 
