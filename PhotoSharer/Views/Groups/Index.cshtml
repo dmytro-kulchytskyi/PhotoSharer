@@ -14,8 +14,7 @@
 @if (Model.Count == 0)
 {
     <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
-};
-else{
+}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Group List</h3>
@@ -31,20 +30,13 @@ else{
                         <tr>
                             <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
                             <td>
-                                <input type="text" id="copyTarget" value="@group.InviteCode"> <button id="copyButton">Copy</button><br><br>
+                                <input type="text" id="@group.Url" value="@group.InviteCode"> <button id="@group.InviteCode">Copy</button><br><br>
                                 <button type="button" class="btn btn-danger">Leave group <span class="glyphicon glyphicon-remove-circle"></span></button>
                             </td>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-}
-
-<script>
-    document.getElementById("copyButton").addEventListener("click", function () {
-        copyToClipboard(document.getElementById("copyTarget"));
+                        <script>
+    document.getElementById("@group.InviteCode").addEventListener("click", function () {
+        copyToClipboard(document.getElementById("@group.Url"));
     });
 
     function copyToClipboard(elem) {
@@ -96,4 +88,11 @@ else{
         }
         return succeed;
     }
-</script>
+                        </script>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
