@@ -8,6 +8,7 @@
         height: 30px;
         width: 400px;
     }
+
     p {
         color: #000000;
         font-size: 20px;
@@ -22,34 +23,41 @@
 {
     <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
 }
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Group List</h3>
-        </div>
-        <div class="panel-body">
-            <table class="table table-hover">
-                <tbody>
-                    @foreach (var group in Model)
-                    {
-                        <tr>
-                            <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
-                            <td>
-                                <p id="@group.Url">@group.InviteCode</p>
-                                <button onclick="copyToClipboard('#@group.Url')" class ="btn btn-primary">Скопировать ссылку</button>
-                                <button type="button" class="btn btn-danger">Leave group <span class="glyphicon glyphicon-remove-circle"></span></button>
-                            </td>
-                        </tr>
-                        
-                    }
-                </tbody>
-            </table>
-        </div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Group List</h3>
     </div>
+    <div class="panel-body">
+        <table class="table table-hover" id="table">
+            <tbody>
+                @foreach (var group in Model)
+                {
+                    <tr>
+                        <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
+                        <td>
+                            <input type="text" disabled value="@Url.Action("Group", "Groups", new { Url = group.Url }, "http")">
+                            <button url="@group.Url" class="btn btn-primary">Скопировать ссылку</button>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
 <script>
-    function copyToClipboard(element) {
+    $(document).ready(function () {
+        $('#table').on('click', 'button', function () {
+            var url = $(this).parent().find('input[type=text]').val();
+            copyToClipboard(url);
+        });
+    });
+
+
+    function copyToClipboard(url) {
         var $temp = $("<input>");
         $("body").append($temp);
-        $temp.val($(element).text()).select();
+        $temp.val(url).select();
         document.execCommand("copy");
         $temp.remove();
     }
