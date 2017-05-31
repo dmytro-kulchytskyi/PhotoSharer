@@ -3,14 +3,20 @@
     ViewBag.Title = "MyGroups";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    input {
+        width: 800px;
+    }
+</style>
+
 <h2>My Groups</h2>
 
 @if (Model.Count == 0)
 {
     <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
-}
-else
-{<div class="panel panel-default">
+};
+else{
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">Group List</h3>
         </div>
@@ -25,10 +31,8 @@ else
                         <tr>
                             <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
                             <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#GetLink">
-                                    Get group link
-                                </button>
-                                <button type="button" class="btn btn-danger">Go out! <span class="glyphicon glyphicon-remove-circle"></span></button>
+                                <input type="text" id="copyTarget" value="@group.InviteCode"> <button id="copyButton">Copy</button><br><br>
+                                <button type="button" class="btn btn-danger">Leave group <span class="glyphicon glyphicon-remove-circle"></span></button>
                             </td>
                         </tr>
                     }
@@ -36,6 +40,60 @@ else
             </table>
         </div>
     </div>
-
-
 }
+
+<script>
+    document.getElementById("copyButton").addEventListener("click", function () {
+        copyToClipboard(document.getElementById("copyTarget"));
+    });
+
+    function copyToClipboard(elem) {
+        // create hidden text element, if it doesn't already exist
+        var targetId = "_hiddenCopyText_";
+        var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+        var origSelectionStart, origSelectionEnd;
+        if (isInput) {
+            // can just use the original source element for the selection and copy
+            target = elem;
+            origSelectionStart = elem.selectionStart;
+            origSelectionEnd = elem.selectionEnd;
+        } else {
+            // must use a temporary form element for the selection and copy
+            target = document.getElementById(targetId);
+            if (!target) {
+                var target = document.createElement("textarea");
+                target.style.position = "absolute";
+                target.style.left = "-9999px";
+                target.style.top = "0";
+                target.id = targetId;
+                document.body.appendChild(target);
+            }
+            target.textContent = elem.textContent;
+        }
+        // select the content
+        var currentFocus = document.activeElement;
+        target.focus();
+        target.setSelectionRange(0, target.value.length);
+
+        // copy the selection
+        var succeed;
+        try {
+            succeed = document.execCommand("copy");
+        } catch (e) {
+            succeed = false;
+        }
+        // restore original focus
+        if (currentFocus && typeof currentFocus.focus === "function") {
+            currentFocus.focus();
+        }
+
+        if (isInput) {
+            // restore prior selection
+            elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+        } else {
+            // clear temporary content
+            target.textContent = "";
+        }
+        return succeed;
+    }
+</script>
