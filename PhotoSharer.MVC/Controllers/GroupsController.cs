@@ -28,22 +28,21 @@ namespace PhotoSharer.MVC.Controllers
 
         public ActionResult Index()
         {
-                var userId = Guid.Parse(User.Identity.GetUserId());
-                var groups = groupsService.GetUserGroups(userId);
+            var userId = Guid.Parse(User.Identity.GetUserId());
+            var groups = groupsService.GetUserGroups(userId);
 
-                if (groups == null)
-                {
-                    groups = new List<AppGroup>(0);
-                }
-               
-                var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
-                {
-                    Name = group.Name,
-                    InviteCode = "http://photosharer.azurewebsites.net/en-en/Group/"+group.InviteCode,
-                    Url = group.Url
-                }).ToList();
+            if (groups == null)
+            {
+                groups = new List<AppGroup>(0);
+            }
 
-                return View(groupsItemList);
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            {
+                Name = group.Name,
+                Url = group.Url
+            }).ToList();
+
+            return View(groupsItemList);
         }
 
 
@@ -74,7 +73,7 @@ namespace PhotoSharer.MVC.Controllers
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
             if (group != null)
             {
-                return RedirectToAction("Group","Groups", new { url = group.Url });
+                return RedirectToAction("Group", "Groups", new { url = group.Url });
             }
 
             return RedirectToAction("Index", "Groups");
