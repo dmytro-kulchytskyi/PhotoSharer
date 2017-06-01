@@ -32,7 +32,7 @@ namespace PhotoSharer.MVC.Controllers
                 groups = new List<AppGroup>(0);
             }
           
-            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel
             {
                 Name = group.Name,
                 Link = group.Link
@@ -40,6 +40,7 @@ namespace PhotoSharer.MVC.Controllers
 
             return View(groupsItemList);
         }
+
 
         [HttpGet]
         public ActionResult Administration()
@@ -52,7 +53,7 @@ namespace PhotoSharer.MVC.Controllers
                 groups = new List<AppGroup>(0);
             }
 
-            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel
             {
                 Name = group.Name,
                 Link = group.Link,
