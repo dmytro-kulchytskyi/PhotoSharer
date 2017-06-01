@@ -198,6 +198,7 @@
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Account\AddAccount.cshtml" />
     <Content Include="Views\Groups\Group.cshtml" />
+    <Content Include="Views\Groups\Administration.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

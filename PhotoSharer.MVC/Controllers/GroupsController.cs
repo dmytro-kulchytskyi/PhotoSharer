@@ -45,6 +45,27 @@ namespace PhotoSharer.MVC.Controllers
             return View(groupsItemList);
         }
 
+        public ActionResult Administration()
+        {
+            var userId = Guid.Parse(User.Identity.GetUserId());
+            var groups = groupsService.GetUserGroups(userId);
+
+            if (groups == null)
+            {
+                groups = new List<AppGroup>(0);
+            }
+
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            {
+                Name = group.Name,
+                Url = group.Url,
+                CreatorId = group.CreatorId,
+                CurrentUserId = userId
+            }).ToList();
+
+            return View(groupsItemList);
+        }
+
 
         [HttpGet]
         [AllowAnonymous]

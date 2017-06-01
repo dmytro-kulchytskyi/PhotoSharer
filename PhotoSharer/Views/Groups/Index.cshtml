@@ -4,7 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>My Groups</h2>
+<h2>Groups</h2>
+<ul class="nav nav-pills">
+    <li role="presentation" class="active"><a href="@Url.Content("/Groups/Index")">My groups</a></li>
+    <li role="presentation"><a href="@Url.Content("/Groups/Administration")">Administration</a></li>
+</ul>
 
 @if (Model.Count == 0)
 {
@@ -22,10 +26,6 @@ else {
                 {
                     <tr>
                         <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
-                        <td>
-                            <button url="@group.Url" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Copy group link</button>
-                            <input type="text" style='width:100em' disabled value="@Url.Action("Group", "Groups", new { Url = group.Url }, "http")">
-                        </td>
                     </tr>
 
                 }
@@ -48,22 +48,5 @@ else {
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('#table').on('click', 'button', function () {
-            var url = $(this).parent().find('input[type=text]').val();
-            copyToClipboard(url);
-        });
-    });
-
-
-    function copyToClipboard(url) {
-        var $temp = $("<input>");
-        $("body").append($temp);
-        $temp.val(url).select();
-        document.execCommand("copy");
-        $temp.remove();
-    }
-</script>
 
 
