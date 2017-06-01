@@ -60,8 +60,18 @@ namespace PhotoSharer.Nhibernate.Repository
                     UserId = userId,
                     GroupId = groupId
                 };
-
-                session.Save(groupMember);
+                ITransaction tr = session.BeginTransaction();
+                try
+                {
+                    session.Save(groupMember);
+                    session.Flush();
+                    tr.Commit();
+                }
+                catch (Exception e)
+                {
+                    tr.Rollback();
+                    return false;
+                }
                 return true;
             }
         }
