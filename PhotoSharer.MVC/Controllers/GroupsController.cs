@@ -35,7 +35,7 @@ namespace PhotoSharer.MVC.Controllers
             {
                 groups = new List<AppGroup>(0);
             }
-            //((System.Security.Claims.ClaimsIdentity)HttpContext.User.Identity).AddClaim(new System.Security.Claims.Claim())
+          
             var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
             {
                 Name = group.Name,
@@ -78,7 +78,7 @@ namespace PhotoSharer.MVC.Controllers
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
             if (group != null)
             {
-                return RedirectToAction("Group", "Groups", new { url = group });
+                return RedirectToAction("Group", "Groups", new { url = group.Url });
             }
 
             return RedirectToAction("Index", "Groups");

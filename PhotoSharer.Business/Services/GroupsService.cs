@@ -10,7 +10,7 @@ namespace PhotoSharer.Business.Services
         private readonly UserService userService;
         private readonly IGroupRepository groupRepository;
         public GroupsService(
-            IGroupRepository groupRepository, 
+            IGroupRepository groupRepository,
             UserService userService)
         {
             this.groupRepository = groupRepository;
@@ -49,5 +49,9 @@ namespace PhotoSharer.Business.Services
         }
 
 
+        public bool AddUser(Guid userId, string groupUrl)
+        {
+            return groupRepository.AddUser(userId, groupUrl);
+        }
     }
 }

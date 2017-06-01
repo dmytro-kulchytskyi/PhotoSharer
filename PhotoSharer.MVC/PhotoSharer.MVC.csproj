@@ -109,9 +109,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFilters\LanguageActionFilter.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,6 +130,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Start\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

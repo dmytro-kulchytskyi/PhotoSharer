@@ -7,7 +7,6 @@
       <generator class="guid" />
     </id>
 
-    <property name="">
     <property name="Provider" not-null="true"/>
     <property name="ExternalId" not-null="true"/>
     <property name="Link" not-null="true" />

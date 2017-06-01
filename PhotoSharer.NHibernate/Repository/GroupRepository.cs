@@ -36,11 +36,16 @@ namespace PhotoSharer.Nhibernate.Repository
             using (var session = sessionFactory.OpenSession())
             {
                 var groupId = session.Query<AppGroup>().Where(_group => _group.Url == groupUrl).Select(_group => _group.Id).SingleOrDefault();
-               if(session.CreateSQLQuery("SELECT* FROM User_Group Where GroupId=? AND UserId=?").SetParameter(0, groupId).SetParameter(1, userId).List().Count != 0)
+                if (groupId == Guid.Empty)
                 {
                     return false;
                 }
-                
+
+                if (session.CreateSQLQuery("SELECT * FROM User_Group Where GroupId=? AND UserId=?").SetParameter(0, groupId).SetParameter(1, userId).List().Count != 0)
+                {
+                    return false;
+                }
+
                 session.CreateSQLQuery("INSERT INTO User_Group ( GroupId, UserId) VALUES (?,?)").SetParameter(0, groupId).SetParameter(1, userId).ExecuteUpdate();
                 return true;
             }
