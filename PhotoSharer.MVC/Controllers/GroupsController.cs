@@ -48,7 +48,7 @@ namespace PhotoSharer.MVC.Controllers
         public ActionResult Administration()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
-            var groups = groupsService.GetUserGroups(userId);
+            var groups = groupsService.GetByUserIdAndCheckIfCreator(userId);
 
             if (groups == null)
             {
@@ -59,8 +59,6 @@ namespace PhotoSharer.MVC.Controllers
             {
                 Name = group.Name,
                 Url = group.Url,
-                CreatorId = group.CreatorId,
-                CurrentUserId = userId
             }).ToList();
 
             return View(groupsItemList);

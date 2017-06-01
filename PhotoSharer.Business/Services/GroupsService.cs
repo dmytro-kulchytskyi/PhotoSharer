@@ -22,6 +22,11 @@ namespace PhotoSharer.Business.Services
             return groupRepository.GetByUserId(userId);
         }
 
+        public IList<AppGroup> GetByUserIdAndCheckIfCreator(Guid userId)
+        {
+            return groupRepository.GetByUserIdAndCheckIfCreator(userId);
+        }
+
         public AppGroup CreateGroup(string groupName, Guid creatorId)
         {
             var creator = userService.GetById(creatorId);

@@ -51,7 +51,6 @@ namespace PhotoSharer.Nhibernate.Repository
             }
         }
 
-
         public IList<AppGroup> GetByUserId(Guid userId, int skip = 0, int take = 0)
         {
             using (var session = sessionFactory.OpenSession())
@@ -66,6 +65,26 @@ namespace PhotoSharer.Nhibernate.Repository
                 }
 
                 return groups.ToList();
+            }
+        }
+
+
+        public IList<AppGroup> GetByUserIdAndCheckIfCreator(Guid userId, int skip = 0, int take = 0)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var user = session.Get<AppUser>(userId);
+                if (user == null) return null;
+
+                var groups = user.Groups.Skip(skip);
+                if (take > 0)
+                {   
+                    groups = groups.Take(take);
+                }
+                var filteredGroups = groups.Where(g => g.CreatorId == user.Id).ToList();
+
+                return filteredGroups;
+
             }
         }
     }
