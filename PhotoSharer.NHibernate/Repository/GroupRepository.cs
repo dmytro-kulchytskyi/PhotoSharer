@@ -56,11 +56,18 @@ namespace PhotoSharer.Nhibernate.Repository
                     return false;
                 }
 
-                var query = session.CreateSQLQuery(@"insert into User_Group (UserId, GroupId) values (:userId, :groupId)")
-                    .SetParameter("userId", userId)
-                    .SetParameter("groupId", groupId)
-                    .ExecuteUpdate();
-                
+                var groupMember = new GroupMember
+                {
+                    UserId = userId,
+                    GroupId = groupId
+                };
+
+                using (var transaction = session.BeginTransaction())
+                {
+                    session.Save(groupMember);
+                    transaction.Commit();
+                }
+
                 return true;
             }
         }

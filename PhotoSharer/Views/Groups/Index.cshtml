@@ -24,7 +24,7 @@ else {
                 @foreach (var group in Model)
                 {
                     <tr>
-                        <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Link })</th>
+                        <th><a href="@Url.RouteUrl("Group", new { link = group.Link })">@group.Name</a></th>
                     </tr>
 
                 }

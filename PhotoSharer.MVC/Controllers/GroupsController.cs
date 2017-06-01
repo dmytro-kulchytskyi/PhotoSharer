@@ -108,7 +108,7 @@ namespace PhotoSharer.MVC.Controllers
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
             if (group != null)
             {
-                return RedirectToAction("Group", "Groups", new { link = group.Link });
+                return RedirectToRoute("Group", new { link = group.Link });
             }
 
             return RedirectToAction("Index", "Groups");
