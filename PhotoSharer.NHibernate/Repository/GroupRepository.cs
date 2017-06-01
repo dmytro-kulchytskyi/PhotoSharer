@@ -20,33 +20,48 @@ namespace PhotoSharer.Nhibernate.Repository
 
 
 
-        public AppGroup GetByUrl(string groupUrl)
+        public AppGroup GetByUrl(string groupLink)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var group = session.QueryOver<AppGroup>().Where(url => url.Url == groupUrl).SingleOrDefault();
+                var group = session.QueryOver<AppGroup>().Where(url => url.Url == groupLink).SingleOrDefault();
                 return group;
             }
 
         }
 
-
-        public bool AddUser(Guid userId, string groupUrl)
+        public Guid GetIdGyUrl(string groupLink)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var groupId = session.Query<AppGroup>().Where(_group => _group.Url == groupUrl).Select(_group => _group.Id).SingleOrDefault();
-                if (groupId == Guid.Empty)
+                var groupId = session.Query<AppGroup>().Where(_group => _group.Url == groupLink)
+                            .Select(_group => _group.Id).SingleOrDefault();
+
+                return groupId;
+            }
+        }
+
+
+        public bool AddUser(Guid userId, Guid groupId)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var isUniq = session.QueryOver<GroupMember>().Where(_groupMember =>
+                          _groupMember.UserId == userId &&
+                          _groupMember.GroupId == groupId).RowCount() == 0;
+
+                if (!isUniq)
                 {
                     return false;
                 }
 
-                if (session.CreateSQLQuery("SELECT * FROM User_Group Where GroupId=? AND UserId=?").SetParameter(0, groupId).SetParameter(1, userId).List().Count != 0)
+                var groupMember = new GroupMember
                 {
-                    return false;
-                }
+                    UserId = userId,
+                    GroupId = groupId
+                };
 
-                session.CreateSQLQuery("INSERT INTO User_Group ( GroupId, UserId) VALUES (?,?)").SetParameter(0, groupId).SetParameter(1, userId).ExecuteUpdate();
+                session.Save(groupMember);
                 return true;
             }
         }

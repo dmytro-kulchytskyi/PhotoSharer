@@ -29,19 +29,26 @@ namespace PhotoSharer.Business.Services
             {
                 return null;
             }
-            Guid guid = Guid.NewGuid();
+
             AppGroup group = new AppGroup()
             {
                 Name = groupName,
-                Url = guid.ToString(),
+                Url = "group-" + Guid.NewGuid().ToString(),
                 CreatorId = creatorId
             };
-
-            group.Users = new List<AppUser> { creator };
+            
             var groupId = groupRepository.Save(group);
 
-            if (groupId == null)
+            if (groupId == null || groupId == Guid.Empty)
             {
+                return null;
+            }
+
+            var addUserResult = groupRepository.AddUser(creatorId, groupId);
+
+            if (!addUserResult)
+            {
+                groupRepository.Delete(group);
                 return null;
             }
 
@@ -51,7 +58,13 @@ namespace PhotoSharer.Business.Services
 
         public bool AddUser(Guid userId, string groupUrl)
         {
-            return groupRepository.AddUser(userId, groupUrl);
+            var groupId = groupRepository.GetIdGyUrl(groupUrl);
+            if (groupId == null || groupId == Guid.Empty)
+            {
+                return false;
+            }
+
+            return groupRepository.AddUser(userId, groupId);
         }
     }
 }

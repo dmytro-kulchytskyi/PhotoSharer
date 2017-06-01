@@ -71,10 +71,11 @@ namespace PhotoSharer.MVC.Controllers
         [AllowAnonymous]
         public ActionResult Group(string url)
         {
-            return Content(url);
+            var group = groupRepository.GetByUrl(url);
+            return View(group);
         }
 
-
+        [HttpGet]
         public ActionResult JoinGroup(string groupUrl)
         {
             var result = groupsService.AddUser(Guid.Parse(User.Identity.GetUserId()), groupUrl);

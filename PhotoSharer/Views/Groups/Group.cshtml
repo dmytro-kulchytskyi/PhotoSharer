@@ -1,50 +1,16 @@
 ﻿@model PhotoSharer.Business.Entities.AppGroup
 
 @{
-    ViewBag.Title = "group";
+    ViewBag.Title = Model.Name;
 }
 
-<h2>group</h2>
+<h2>@Model.Name</h2>
 
 <div>
     <h4>AppGroup</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.InviteCode)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InviteCode)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Url)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Url)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreatorId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreatorId)
-        </dd>
-
-    </dl>
-</div>
+    
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Join to group", "JoinGroup", new { id = Model.Url})
     @Html.ActionLink("Back to List", "Index")
 </p>
+    </div>

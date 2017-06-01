@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="Entities\AppGroup.cs" />
     <Compile Include="Entities\AppUser.cs" />
+    <Compile Include="Entities\GroupMember.cs" />
     <Compile Include="Entities\Interfaces\IEntity.cs" />
     <Compile Include="Entities\Login.cs" />
     <Compile Include="Entities\Photo.cs" />
