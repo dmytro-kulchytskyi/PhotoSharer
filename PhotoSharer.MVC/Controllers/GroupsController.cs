@@ -39,7 +39,6 @@ namespace PhotoSharer.MVC.Controllers
             var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
             {
                 Name = group.Name,
-                InviteCode = group.InviteCode,
                 Url = group.Url
             }).ToList();
 
@@ -57,7 +56,7 @@ namespace PhotoSharer.MVC.Controllers
 
         public ActionResult JoinGroup(string groupUrl)
         {
-            var result = groupsService.AddUserToGroup(Guid.Parse(User.Identity.GetUserId()), groupUrl);
+            var result = groupsService.AddUser(Guid.Parse(User.Identity.GetUserId()), groupUrl);
             return Content(result.ToString());
         }
 

@@ -33,7 +33,6 @@ namespace PhotoSharer.Business.Services
             AppGroup group = new AppGroup()
             {
                 Name = groupName,
-                InviteCode = guid.ToString(),
                 Url = guid.ToString(),
                 CreatorId = creatorId
             };
@@ -49,11 +48,6 @@ namespace PhotoSharer.Business.Services
             return group;
         }
 
-        public bool AddUserToGroup(Guid userId, string groupUrl)
-        {
-
-            return groupRepository.AddUser(userId,groupUrl) ;
-        }
 
     }
 }
