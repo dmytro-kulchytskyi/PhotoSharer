@@ -116,6 +116,7 @@
     <Compile Include="ViewModels\Account\ExternalLoginListViewModel.cs" />
     <Compile Include="ViewModels\Groups\CreateGroupViewModel.cs" />
     <Compile Include="ViewModels\Groups\GroupListPageItemViewModel.cs" />
+    <Compile Include="ViewModels\Groups\GroupViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PhotoSharer.Business\PhotoSharer.Business.csproj">

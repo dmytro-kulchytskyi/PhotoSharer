@@ -35,12 +35,6 @@ namespace PhotoSharer.MVC.Controllers
 
 
 
-        public ActionResult Properties()
-        {
-            return View();
-        }
-
-
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Login()
@@ -78,7 +72,8 @@ namespace PhotoSharer.MVC.Controllers
 
             if (loginInfo == null)
             {
-                return RedirectToAction("Login");
+                var errorMessage = "Error, please try again.";
+                return View("LoginError", model: errorMessage);
             }
 
             if (!User.Identity.IsAuthenticated)
@@ -113,7 +108,9 @@ namespace PhotoSharer.MVC.Controllers
                                     return RedirectToLocal(returnUrl);
                                 }
                             }
-                            return RedirectToAction("Index", "Groups");
+
+                            var errorMessage = "Error, please try again.";
+                            return View("LoginError", model: errorMessage);
                         }
                 }
             }
@@ -124,7 +121,9 @@ namespace PhotoSharer.MVC.Controllers
                 {
                     return RedirectToLocal(returnUrl);
                 }
-                return RedirectToAction("Index", "Groups");
+
+                var errorMessage = "Looks like this account already exists in our system.";
+                return View("LoginError", model: errorMessage);
             }
         }
 
@@ -159,7 +158,7 @@ namespace PhotoSharer.MVC.Controllers
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
-            private readonly string XsrfKey = System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
+            private static readonly string XsrfKey = System.Configuration.ConfigurationManager.AppSettings["XsrfKey"];
 
             public ChallengeResult(string provider, string redirectUri)
                 : this(provider, redirectUri, null)
@@ -180,12 +179,12 @@ namespace PhotoSharer.MVC.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
+                var properties = new AuthenticationProperties { RedirectUri = this.RedirectUri };
+                if (this.UserId != null)
                 {
-                    properties.Dictionary[XsrfKey] = UserId;
+                    properties.Dictionary[XsrfKey] = this.UserId;
                 }
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
+                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, this.LoginProvider);
             }
         }
         #endregion

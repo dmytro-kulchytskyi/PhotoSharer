@@ -1,59 +1,55 @@
 ﻿@model IList<PhotoSharer.MVC.ViewModels.Groups.GroupListPageItemViewModel>
-        @{
-            ViewBag.Title = "Administration";
-            Layout = "~/Views/Shared/_Layout.cshtml";
-        }
 
-        <h2>Administration</h2>
-        <ul class="nav nav-pills">
-            <li role="presentation"><a href="@Url.Content("/Groups/Index")">My groups</a></li>
-            <li role="presentation" class="active"><a href="@Url.Content("/Groups/Administration")">Administration</a></li>
-        </ul>
+@{
+    ViewBag.Title = "Administration";
+}
 
-        @if (Model.Count == 0)
-        {
-            <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
-        }
-        else
-        {
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Group List</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-hover" id="table">
-                        <tbody>
-                            @foreach (var group in Model)
-                            {
-                                if (group.CreatorId == group.CurrentUserId)
-                                {
-                                <tr>
-                                    <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
-                                    <td>
-                                        <input type="text" style='width:50em' disabled value="@Url.Action("Group", "Groups", new { Url = group.Url }, "http")">
-                                    </td>
-                                </tr>
+<h2>Administration</h2>
+<ul class="nav nav-pills">
+    <li role="presentation">@Html.ActionLink("My groups", "Index", "Groups")</li>
+    <li role="presentation" class="active">@Html.ActionLink("Administration", "Administration", "Groups")</li>
+</ul>
+<hr />
+@if (Model.Count == 0)
+{
+    <div class="alert alert-warning" role="alert">You are not a member of any group.</div>
+}
+else
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Group List</h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover" id="table">
+                <tbody>
+                    @foreach (var group in Model)
+                    {
+                        <tr>
+                            <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Link })</th>
+                            <td>
+                                <input type="text" style='width:50em' disabled value="@Url.Action("Group", "Groups", new { Url = group.Link }, "http")">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
 
-        <div id="myModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Link was successfully copied</h4>
-                    </div>
-                </div>
-
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Link was successfully copied</h4>
             </div>
         </div>
+
+    </div>
+</div>
 
 
 

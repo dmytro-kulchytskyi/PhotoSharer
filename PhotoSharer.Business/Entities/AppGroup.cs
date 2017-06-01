@@ -8,7 +8,7 @@ namespace PhotoSharer.Business.Entities
     {
         public virtual Guid Id { get; set; }
         public virtual string Name { get; set; }
-        public virtual string Url { get; set; }
+        public virtual string Link { get; set; }
         public virtual Guid CreatorId { get; set; }
 
         private IList<AppUser> users;

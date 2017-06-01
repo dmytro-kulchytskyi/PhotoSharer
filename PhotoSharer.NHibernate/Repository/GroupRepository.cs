@@ -1,4 +1,5 @@
 ﻿using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Linq;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
@@ -20,21 +21,21 @@ namespace PhotoSharer.Nhibernate.Repository
 
 
 
-        public AppGroup GetByUrl(string groupLink)
+        public AppGroup GetByLink(string groupLink)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var group = session.QueryOver<AppGroup>().Where(url => url.Url == groupLink).SingleOrDefault();
+                var group = session.QueryOver<AppGroup>().Where(url => url.Link == groupLink).SingleOrDefault();
                 return group;
             }
 
         }
 
-        public Guid GetIdGyUrl(string groupLink)
+        public Guid GetIdByLink(string groupLink)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var groupId = session.Query<AppGroup>().Where(_group => _group.Url == groupLink)
+                var groupId = session.Query<AppGroup>().Where(_group => _group.Link == groupLink)
                             .Select(_group => _group.Id).SingleOrDefault();
 
                 return groupId;
@@ -55,13 +56,11 @@ namespace PhotoSharer.Nhibernate.Repository
                     return false;
                 }
 
-                var groupMember = new GroupMember
-                {
-                    UserId = userId,
-                    GroupId = groupId
-                };
-
-                session.Save(groupMember);
+                var query = session.CreateSQLQuery(@"insert into User_Group (UserId, GroupId) values (:userId, :groupId)")
+                    .SetParameter("userId", userId)
+                    .SetParameter("groupId", groupId)
+                    .ExecuteUpdate();
+                
                 return true;
             }
         }
@@ -71,16 +70,35 @@ namespace PhotoSharer.Nhibernate.Repository
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var user = session.Get<AppUser>(userId);
-                if (user == null) return null;
+                var groupIds = DetachedCriteria.For<GroupMember>()
+                    .SetProjection(Projections.Property("GroupId"))
+                    .Add(Restrictions.Eq("UserId", userId));
 
-                var groups = user.Groups.Skip(skip);
-                if (take > 0)
+                var groupsCriteria = session.CreateCriteria<AppGroup>()
+                    .Add(Subqueries.PropertyIn("Id", groupIds));
+
+                if (skip > 0)
                 {
-                    groups = groups.Take(take);
+                    groupsCriteria.SetFirstResult(skip);
                 }
 
-                return groups.ToList();
+                if (take > 0)
+                {
+                    groupsCriteria.SetMaxResults(take);
+                }
+
+                return groupsCriteria.List<AppGroup>();
+            }
+        }
+
+        public IList<AppGroup> GetCreatedByUser(Guid userId)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var groups = session.QueryOver<AppGroup>()
+                        .Where(group => group.CreatorId == userId).List();
+
+                return groups;
             }
         }
     }

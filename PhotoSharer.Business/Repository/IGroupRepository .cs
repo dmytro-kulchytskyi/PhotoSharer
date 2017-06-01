@@ -8,7 +8,8 @@ namespace PhotoSharer.Business.Repository
     {
         IList<AppGroup> GetByUserId(Guid userId, int skip = 0, int take = 0);
         bool AddUser(Guid userId, Guid groupId);
-        AppGroup GetByUrl(string groupLink);
-        Guid GetIdGyUrl(string groupLink);
+        AppGroup GetByLink(string groupLink);
+        Guid GetIdByLink(string groupLink);
+        IList<AppGroup> GetCreatedByUser(Guid userId);
     }
 }

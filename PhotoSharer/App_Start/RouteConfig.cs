@@ -15,7 +15,7 @@ namespace PhotoSharer.Web
             
             routes.MapRoute(
              name: "Group",
-                url: "Group/{url}",
+                url: "Group/{link}",
                 defaults: new
                 {
                     controller = "Groups",

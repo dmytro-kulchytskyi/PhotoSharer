@@ -33,7 +33,7 @@ namespace PhotoSharer.Business.Services
             AppGroup group = new AppGroup()
             {
                 Name = groupName,
-                Url = "group-" + Guid.NewGuid().ToString(),
+                Link = "group-" + Guid.NewGuid().ToString(),
                 CreatorId = creatorId
             };
             
@@ -58,13 +58,27 @@ namespace PhotoSharer.Business.Services
 
         public bool AddUser(Guid userId, string groupUrl)
         {
-            var groupId = groupRepository.GetIdGyUrl(groupUrl);
+            var groupId = groupRepository.GetIdByLink(groupUrl);
             if (groupId == null || groupId == Guid.Empty)
             {
                 return false;
             }
 
             return groupRepository.AddUser(userId, groupId);
+        }
+
+        public IList<AppGroup> GetCreatedByUser(Guid userId)
+        {
+            var groups = groupRepository.GetCreatedByUser(userId);
+
+            return groups;
+        }
+
+        public AppGroup GetByLink(string groupLink)
+        {
+            var group = groupRepository.GetByLink(groupLink);
+
+            return group;
         }
     }
 }
