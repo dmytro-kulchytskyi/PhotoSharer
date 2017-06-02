@@ -8,10 +8,9 @@ namespace PhotoSharer.MVC.ViewModels.Groups
         [ScaffoldColumn(false)]
         public Guid Id { get; set; }
 
-
-        [Required(ErrorMessage = "Поле должно быть установлено")]
-        [Display(Name = "Имя Группы")]
-        [StringLength(255, ErrorMessage = "Максимальная длинна имени - 255 символов")]
+        [Required]
+        [Display(Name = "Group name")]
+        [StringLength(255, ErrorMessage = "The maximum length is {1}")]
         public string Name { get; set; }
 
         [ScaffoldColumn(false)]
