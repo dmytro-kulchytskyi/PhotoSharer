@@ -27,7 +27,7 @@ else
                         <tr>
                             <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Link })</th>
                             <td>
-                                <input type="text" style='width:50em' disabled value="@Url.Action("Group", "Groups", new { Url = group.Link }, "http")">
+                                <input type="text" style='width:50em' disabled value="@Url.RouteUrl("Group", new { link = group.Link }, "http")">
                             </td>
                         </tr>
                     }
