@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true"  assembly="PhotoSharer.Business" namespace="PhotoSharer.Business.Entities">
+  <class name="GroupMember" table="User_Group" dynamic-update="true" >
+      <composite-id>
+        <key-property name="UserId" />
+        <key-property name="GroupId" />
+      </composite-id>
+  </class>
+</hibernate-mapping>

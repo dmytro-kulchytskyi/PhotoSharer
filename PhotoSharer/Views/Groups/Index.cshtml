@@ -1,20 +1,20 @@
 ﻿@model IList<PhotoSharer.MVC.ViewModels.Groups.GroupListPageItemViewModel>
 @{
     ViewBag.Title = "MyGroups";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Groups</h2>
 <ul class="nav nav-pills">
-    <li role="presentation" class="active"><a href="@Url.Content("/Groups/Index")">My groups</a></li>
-    <li role="presentation"><a href="@Url.Content("/Groups/Administration")">Administration</a></li>
+    <li role="presentation" class="active">@Html.ActionLink("My groups", "Index", "Groups")</li>
+    <li role="presentation">@Html.ActionLink("Administration", "Administration", "Groups")</li>
 </ul>
-
+<hr />
 @if (Model.Count == 0)
 {
-    <div class="alert alert-warning" role="alert">You don`t stay in no one group </div>
+    <p>You are not a member of any group.</p>
 }
-else { 
+else
+{
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Group List</h3>
@@ -25,7 +25,7 @@ else {
                 @foreach (var group in Model)
                 {
                     <tr>
-                        <th>@Html.ActionLink(group.Name, "Group", new { Url = group.Url })</th>
+                        <th>@Html.RouteLink(group.Name, "Group", new { link = group.Link })"></th>
                     </tr>
 
                 }

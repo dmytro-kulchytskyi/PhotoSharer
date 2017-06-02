@@ -20,14 +20,14 @@ namespace PhotoSharer.Business.Entities
             set { groups = value; }
         }
 
-        private IList<Login> _Logins;
+        private IList<Login> logins;
         public virtual IList<Login> Logins
         {
             get
             {
-                return _Logins ?? (_Logins = new List<Login>());
+                return logins ?? (logins = new List<Login>());
             }
-            set { _Logins = value; }
+            set { logins = value; }
         }
     }
 }

@@ -8,7 +8,7 @@
     </id>
 
     <property name="Name" not-null="true" />
-    <property name="Url" not-null="true" />
+    <property name="Link" not-null="true" />
     <property name="CreatorId" not-null="true" />
 
     <bag name="Users" table="User_Group" cascade="save-update" >

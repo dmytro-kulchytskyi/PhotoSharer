@@ -2,6 +2,7 @@
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Repository;
+using PhotoSharer.Business.Stores;
 using System;
 using System.Threading.Tasks;
 
@@ -12,12 +13,15 @@ namespace PhotoSharer.Business.Services
     {
         private readonly IUserRepository userRepository;
         private readonly AppUserManager userManager;
+        private readonly AppUserStore userStore;
 
         public UserService(IUserRepository userRepository,
-                           AppUserManager userManager)
+                           AppUserManager userManager,
+                           AppUserStore userStore)
         {
             this.userManager = userManager;
             this.userRepository = userRepository;
+            this.userStore = userStore;
         }
 
 
@@ -35,9 +39,11 @@ namespace PhotoSharer.Business.Services
         public async Task<AppUser> CreateUserAsync(string userName)
         {
             var user = new AppUser { UserName = userName };
-            var createUserResult = await userManager.CreateAsync(user);
-            if (createUserResult.Succeeded) return user;
-            return null;
+            await userStore.CreateAsync(user);
+            if (user.Id == null || user.Id == Guid.Empty)
+                return null;
+
+            return user;
         }
     }
 }

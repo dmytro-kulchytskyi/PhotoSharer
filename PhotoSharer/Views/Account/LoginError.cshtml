@@ -1,0 +1,10 @@
+﻿@model string
+@{
+    ViewBag.Title = "LoginError";
+}
+<br />
+<div class="alert alert-warning" role="alert">@Model</div>
+<div>
+    @Html.ActionLink("Try Again", "Login", "Account")
+</div>
+

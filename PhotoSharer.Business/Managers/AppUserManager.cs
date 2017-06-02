@@ -10,6 +10,7 @@ namespace PhotoSharer.Business.Managers
         {
             UserValidator = new UserValidator<AppUser, Guid>(this)
             {
+                AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = false
             };
             

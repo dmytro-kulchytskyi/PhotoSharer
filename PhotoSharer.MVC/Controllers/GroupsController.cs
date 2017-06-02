@@ -13,19 +13,15 @@ namespace PhotoSharer.MVC.Controllers
     [Authorize]
     public class GroupsController : Controller
     {
-        private readonly IGroupRepository groupRepository;
         private readonly GroupsService groupsService;
 
-        public GroupsController(
-            IGroupRepository groupRepository,
-            GroupsService groupsService)
+        public GroupsController(GroupsService groupsService)
         {
             this.groupsService = groupsService;
-            this.groupRepository = groupRepository;
         }
 
 
-
+        [HttpGet]
         public ActionResult Index()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
@@ -36,29 +32,31 @@ namespace PhotoSharer.MVC.Controllers
                 groups = new List<AppGroup>(0);
             }
           
-            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel
             {
                 Name = group.Name,
-                Url = group.Url
+                Link = group.Link
             }).ToList();
 
             return View(groupsItemList);
         }
 
+
+        [HttpGet]
         public ActionResult Administration()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
-            var groups = groupsService.GetByUserIdAndCheckIfCreator(userId);
+            var groups = groupsService.GetCreatedByUser(userId);
 
             if (groups == null)
             {
                 groups = new List<AppGroup>(0);
             }
 
-            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel()
+            var groupsItemList = groups.Select(group => new GroupListPageItemViewModel
             {
                 Name = group.Name,
-                Url = group.Url,
+                Link = group.Link,
             }).ToList();
 
             return View(groupsItemList);
@@ -67,17 +65,31 @@ namespace PhotoSharer.MVC.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Group(string url)
+        public ActionResult Group(string link)
         {
-            return Content(url);
+            var group = groupsService.GetByLink(link);
+            if (group == null)
+            {
+                return HttpNotFound();
+            }
+
+            var model = new GroupViewModel
+            {
+                Name = group.Name,
+                Link = group.Link
+            };
+
+            return View(model);
         }
 
-
-        public ActionResult JoinGroup(string groupUrl)
+        
+        [HttpPost]
+        public ActionResult JoinGroup(string link)
         {
-            var result = groupsService.AddUser(Guid.Parse(User.Identity.GetUserId()), groupUrl);
+            var result = groupsService.AddUser(Guid.Parse(User.Identity.GetUserId()), link);
             return Content(result.ToString());
         }
+
 
         [HttpGet]
         public ActionResult CreateGroup()
@@ -97,7 +109,7 @@ namespace PhotoSharer.MVC.Controllers
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
             if (group != null)
             {
-                return RedirectToAction("Group", "Groups", new { url = group.Url });
+                return RedirectToRoute("Group", new { link = group.Link });
             }
 
             return RedirectToAction("Index", "Groups");
