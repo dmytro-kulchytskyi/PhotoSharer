@@ -9,7 +9,8 @@
     <div>
         @using (Html.BeginForm("JoinGroup", "Groups", new { link = Model.Link }))
         {
-            <input type="submit" value="Join Group" />
+            @Html.AntiForgeryToken()
+            <input type="submit" value="Join Group" class="btn btn-primary" />
         }
     </div>
     <br />

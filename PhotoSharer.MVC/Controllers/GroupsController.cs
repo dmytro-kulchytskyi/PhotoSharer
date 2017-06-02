@@ -31,7 +31,7 @@ namespace PhotoSharer.MVC.Controllers
             {
                 groups = new List<AppGroup>(0);
             }
-          
+
             var groupsItemList = groups.Select(group => new GroupListPageItemViewModel
             {
                 Name = group.Name,
@@ -82,8 +82,9 @@ namespace PhotoSharer.MVC.Controllers
             return View(model);
         }
 
-        
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult JoinGroup(string link)
         {
             var result = groupsService.AddUser(Guid.Parse(User.Identity.GetUserId()), link);
