@@ -132,7 +132,7 @@ namespace PhotoSharer.MVC.Controllers
         public ActionResult LogOff()
         {
             authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Groups");
+            return RedirectToAction("My", "Groups");
         }
 
         #region Helpers
@@ -152,7 +152,7 @@ namespace PhotoSharer.MVC.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Groups");
+            return RedirectToAction("My", "Groups");
         }
 
 
