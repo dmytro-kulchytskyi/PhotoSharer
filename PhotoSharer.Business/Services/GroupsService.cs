@@ -25,12 +25,6 @@ namespace PhotoSharer.Business.Services
 
         public AppGroup CreateGroup(string groupName, Guid creatorId)
         {
-            var creator = userService.GetById(creatorId);
-            if (creator == null)
-            {
-                return null;
-            }
-
             string pattern = @"[\W\s]+";
             string replacement = "-";
             Regex rgx = new Regex(pattern);
@@ -45,20 +39,14 @@ namespace PhotoSharer.Business.Services
             
             var groupId = groupRepository.Save(group);
 
-            if (groupId == null || groupId == Guid.Empty)
+            if (groupId == Guid.Empty)
             {
-                return null;
+                throw new ArgumentNullException("Group id is null");
             }
 
             var addUserResult = groupRepository.AddUser(creatorId, groupId);
 
-            if (!addUserResult)
-            {
-                groupRepository.Delete(group);
-                return null;
-            }
-
-            return group;
+        return group;
         }
 
 
