@@ -2,6 +2,7 @@
 using PhotoSharer.Business.Repository;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace PhotoSharer.Business.Services
 {
@@ -30,10 +31,15 @@ namespace PhotoSharer.Business.Services
                 return null;
             }
 
+            string pattern = @"[\W\s]+";
+            string replacement = "-";
+            Regex rgx = new Regex(pattern);
+            string groupNameLink = rgx.Replace(groupName, replacement);
+
             AppGroup group = new AppGroup()
             {
                 Name = groupName,
-                Link = "group-" + Guid.NewGuid().ToString(),
+                Link = "group-" + Guid.NewGuid().ToString() + "-" +groupNameLink,
                 CreatorId = creatorId
             };
             
