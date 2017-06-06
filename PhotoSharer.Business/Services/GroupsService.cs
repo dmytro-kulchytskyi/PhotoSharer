@@ -9,10 +9,10 @@ namespace PhotoSharer.Business.Services
     public class GroupsService
     {
         private readonly UserService userService;
+
         private readonly IGroupRepository groupRepository;
-        public GroupsService(
-            IGroupRepository groupRepository,
-            UserService userService)
+
+        public GroupsService(IGroupRepository groupRepository, UserService userService)
         {
             this.groupRepository = groupRepository;
             this.userService = userService;

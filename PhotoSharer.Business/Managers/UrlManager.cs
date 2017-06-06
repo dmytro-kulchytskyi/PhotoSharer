@@ -13,6 +13,9 @@ namespace PhotoSharer.Business.Managers
         {
             var result = Regex.Replace(line, @"\W+", "-").Trim('-');
 
+            if (string.IsNullOrWhiteSpace(result))
+                result = "_";
+
             return result;
         }
     }

@@ -24,7 +24,7 @@ namespace PhotoSharer.Web
 
             routes.MapRoute(
             name: "MyPhotoStreams",
-               url: "group-{id}-{link}/MyStreams",
+               url: "group-{id}-{link}/my-streams",
                defaults: new
                {
                    controller = "Groups",
@@ -65,7 +65,18 @@ namespace PhotoSharer.Web
                     id = UrlParameter.Optional,
                 },
                 namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
-            ); 
+            );
+
+            routes.MapRoute(
+               name: "404",
+               url: "{*url}",
+               defaults: new
+               {
+                   controller = "System",
+                   action = "Http404",
+               },
+               namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
+           );
         }
     }
 }

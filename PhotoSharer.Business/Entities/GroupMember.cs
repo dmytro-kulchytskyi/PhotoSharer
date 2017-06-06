@@ -14,24 +14,16 @@ namespace PhotoSharer.Business.Entities
         public override bool Equals(object obj)
         {
             if (this == null && obj == null)
-            {
                 return true;
-            }
 
             if (this == null || obj == null)
-            {
                 return false;
-            }
 
             var groupMember = obj as GroupMember;
             if (groupMember == null)
-            {
                 return false;
-            }
 
-            var result = groupMember.UserId == UserId && groupMember.GroupId == GroupId;
-
-            return result;
+            return groupMember.UserId == UserId && groupMember.GroupId == GroupId;
         }
 
         public override int GetHashCode()

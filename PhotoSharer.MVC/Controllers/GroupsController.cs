@@ -119,12 +119,9 @@ namespace PhotoSharer.MVC.Controllers
         }
 
         [HttpGet]
-        public ActionResult MyPhotoStreams(Guid? id, string link)
+        public ActionResult MyPhotoStreams(Guid id, string link)
         {
-            if (!id.HasValue)
-                return HttpNotFound();
-
-            var group = groupsService.GetByGroupInfo(id.Value, link);
+            var group = groupsService.GetByGroupInfo(id, link);
 
             if (group == null)
                 return HttpNotFound();
