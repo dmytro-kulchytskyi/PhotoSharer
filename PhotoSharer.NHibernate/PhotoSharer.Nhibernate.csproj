@@ -51,8 +51,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\GroupRepository.cs" />
-    <Compile Include="Repository\LoginRepository.cs" />
     <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\PhotoStreamRepository.cs" />
     <Compile Include="Repository\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,10 +62,7 @@
     <EmbeddedResource Include="Mappings\AppUser.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mappings\Login.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Mappings\Photo.hbm.xml" />
+    <EmbeddedResource Include="Mappings\PhotoStream.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -8,18 +8,16 @@ using PhotoSharer.Business.Entities;
 using System.Web;
 using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Services;
-using System.Linq;
-using System.Security.Claims;
 
 namespace PhotoSharer.MVC.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IAuthenticationManager authenticationManager;
         private readonly SignInManager<AppUser, Guid> signInManager;
         private readonly AppUserManager userManager;
         private readonly UserService userService;
-
 
         public AccountController(
             IAuthenticationManager authenticationManager,
@@ -33,37 +31,26 @@ namespace PhotoSharer.MVC.Controllers
             this.userManager = userManager;
         }
 
-
+        public ActionResult Test()
+        {
+            return View("Properties");
+        }
 
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl = "")
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("AddAccount");
-            }
-
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
-
-
-        [HttpGet]
-        [Authorize]
-        public ActionResult AddAccount()
-        {
-            return View();
-        }
-
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { returnUrl = returnUrl }));
         }
-
 
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
@@ -71,73 +58,37 @@ namespace PhotoSharer.MVC.Controllers
             var loginInfo = await authenticationManager.GetExternalLoginInfoAsync();
 
             if (loginInfo == null)
+                return RedirectToAction("MyGroups", "Groups");
+
+            var result = await signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+
+            switch (result)
             {
-                var errorMessage = "Error, please try again.";
-                return View("LoginError", model: errorMessage);
-            }
-
-            if (!User.Identity.IsAuthenticated)
-            {
-                var result = await signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-
-                switch (result)
-                {
-                    case SignInStatus.Success:
-                        {
-                            return RedirectToLocal(returnUrl);
-                        }
-                    case SignInStatus.Failure:
-                    default:
-                        {
-                            var userName = string.Empty;
-
-                            if (loginInfo.ExternalIdentity != null &&
-                               !string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
-                            {
-                                userName = loginInfo.ExternalIdentity.Name;
-                            }
-
-                            var user = await userService.CreateUserAsync(userName);
-
-                            if (user != null)
-                            {
-                                var addLoginResult = await userManager.AddLoginAsync(user.Id, loginInfo.Login);
-                                if (addLoginResult.Succeeded)
-                                {
-                                    await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                                    return RedirectToLocal(returnUrl);
-                                }
-                            }
-
-                            var errorMessage = "Error, please try again.";
-                            return View("LoginError", model: errorMessage);
-                        }
-                }
-            }
-            else
-            {
-                var result = await userManager.AddLoginAsync(Guid.Parse(User.Identity.GetUserId()), loginInfo.Login);
-                if (result.Succeeded)
-                {
+                case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                }
 
-                var errorMessage = "Looks like this account already exists in our system.";
-                return View("LoginError", model: errorMessage);
+                case SignInStatus.Failure:
+                default:
+                    var userName = string.Empty;
+
+                    if (loginInfo.ExternalIdentity != null && !string.IsNullOrEmpty(loginInfo.ExternalIdentity.Name))
+                        userName = loginInfo.ExternalIdentity.Name;
+
+                    var user = userService.CreateUser(userName, loginInfo.Login);
+                    await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    return RedirectToLocal(returnUrl);
             }
         }
-
 
         [Authorize]
         public ActionResult LogOff()
         {
             authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Groups");
+            return RedirectToAction("MyGroups", "Groups");
         }
 
         #region Helpers
-        //---
-
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -149,12 +100,10 @@ namespace PhotoSharer.MVC.Controllers
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
-            {
                 return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Groups");
-        }
 
+            return RedirectToAction("MyGroups", "Groups");
+        }
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
@@ -164,7 +113,6 @@ namespace PhotoSharer.MVC.Controllers
                 : this(provider, redirectUri, null)
             {
             }
-
 
             public ChallengeResult(string provider, string redirectUri, string userId)
             {
@@ -181,9 +129,8 @@ namespace PhotoSharer.MVC.Controllers
             {
                 var properties = new AuthenticationProperties { RedirectUri = this.RedirectUri };
                 if (this.UserId != null)
-                {
                     properties.Dictionary[XsrfKey] = this.UserId;
-                }
+
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, this.LoginProvider);
             }
         }

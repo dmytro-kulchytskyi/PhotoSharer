@@ -18,18 +18,13 @@
                 </button>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    @Html.ActionLink("Hello " + User.Identity.Name, "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
-                }
-                else
-                {
-                    @Html.ActionLink("Home", "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Hello " + User.Identity.Name, "MyGroups", "Groups", new { area = "" }, new { @class = "navbar-brand" })
                 }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (User.Identity.IsAuthenticated)
                     {    
-                        <li>@Html.ActionLink("Add Account", "AddAccount", "Account")</li>
                         <li>@Html.ActionLink("Create new group", "CreateGroup", "Groups")</li>
                         <li>@Html.ActionLink("Log Out", "LogOff", "Account")</li>
                     }
@@ -41,8 +36,8 @@
             </div>
         </div>
     </div>
-
-    <div class="container body-content">
+   
+    <div class="container body-content">     
         @RenderBody()
         <hr />
         <footer>

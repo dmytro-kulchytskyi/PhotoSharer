@@ -1,4 +1,5 @@
-﻿using PhotoSharer.Web.App_Start;
+﻿using PhotoSharer.MVC.Helpers;
+using PhotoSharer.Web.App_Start;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -12,7 +13,8 @@ namespace PhotoSharer.Web
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles); 
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            EntityMapper.ConfigureMappings();
         }
     }
 }

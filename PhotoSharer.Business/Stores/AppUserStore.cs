@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
@@ -14,119 +13,65 @@ namespace PhotoSharer.Business.Stores
                                 IUserTwoFactorStore<AppUser, Guid>
     {
         private IUserRepository userRepository;
-        private ILoginRepository loginRepository;
 
-        public AppUserStore(IUserRepository userRepository,
-            ILoginRepository loginRepository)
+        public AppUserStore(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
-            this.loginRepository = loginRepository;
         }
-
-
 
         public Task CreateAsync(AppUser user)
         {
-            return Task.Run(() =>
-            {
-                userRepository.Save(user);
-            });
+            return Task.Run(() => userRepository.Save(user));
         }
-
 
         public Task UpdateAsync(AppUser user)
         {
-            return Task.Run(() =>
-            {
-                userRepository.Update(user);
-            });
+            return Task.Run(() => userRepository.Update(user));
         }
-
 
         public Task DeleteAsync(AppUser user)
         {
-            return Task.Run(() =>
-            {
-                userRepository.Delete(user);
-            });
+            return Task.Run(() => userRepository.Delete(user));
         }
-
 
         public Task<AppUser> FindByIdAsync(Guid userId)
         {
-            return Task.Run(() =>
-            {
-                var user = userRepository.GetById(userId);
-                return user;
-            });
+            return Task.Run(() => userRepository.GetById(userId));
         }
 
+        public Task<AppUser> FindAsync(UserLoginInfo login)
+        {
+            return Task.Run(() => userRepository.GetUserByLoginInfo(login.LoginProvider, login.ProviderKey));
+        }
 
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(AppUser user)
+        {
+            var login = new UserLoginInfo(user.LoginProvider, user.ProviderKey);
+            IList<UserLoginInfo> logins = new List<UserLoginInfo> { login };
+
+            return Task.FromResult(logins);
+        }
+
+        public void Dispose()
+        {
+            userRepository = null;
+        }
+
+        //---
         public Task<AppUser> FindByNameAsync(string userName)
         {
             return Task.FromResult<AppUser>(null);
         }
 
-
         public Task AddLoginAsync(AppUser user, UserLoginInfo loginInfo)
         {
-            return Task.Run(() =>
-            {
-                var login = new Login()
-                {
-                    LoginProvider = loginInfo.LoginProvider,
-                    ProviderKey = loginInfo.ProviderKey,
-                    User = user
-                };
-                loginRepository.Save(login);
-            });
+            return Task.FromResult(true);
         }
-
-
-        public Task<AppUser> FindAsync(UserLoginInfo login)
-        {
-            return Task.Run(() =>
-            {
-                var user = userRepository.GetByLoginInfo(login.LoginProvider, login.ProviderKey);
-                return user;
-            });
-        }
-
-
-        public Task<IList<UserLoginInfo>> GetLoginsAsync(AppUser user)
-        {
-            return Task.Run(() =>
-            {
-                var logins = loginRepository.GetByUserId(user.Id);
-                IList<UserLoginInfo> loginInfoList = logins.Select(login =>
-                    new UserLoginInfo(login.LoginProvider, login.ProviderKey)).ToList();
-
-                return loginInfoList;
-            });
-        }
-
 
         public Task RemoveLoginAsync(AppUser user, UserLoginInfo loginInfo)
         {
-            return Task.Run(() =>
-            {
-                var login = loginRepository.GetByLoginInfo(user.Id, loginInfo.LoginProvider, loginInfo.ProviderKey);
-                if (login != null)
-                {
-                    loginRepository.Delete(login);
-                }
-            });
+            return Task.FromResult(true);
         }
-
-
-        public void Dispose()
-        {
-            userRepository = null;
-            loginRepository = null;
-        }
-
-
-        //---
 
         public Task<bool> GetTwoFactorEnabledAsync(AppUser user)
         {

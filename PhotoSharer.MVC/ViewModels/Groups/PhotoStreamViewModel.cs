@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace PhotoSharer.MVC.ViewModels.Groups
 {
-    public class GroupViewModel
+    public class PhotoStreamViewModel
     {
         public Guid Id { get; set; }
-        public bool IsMember { get; set; }
-        public bool IsCreator { get; set; }
-        public string Name { get; set; }
-        public string Link { get; set; }
+        public string Provider { get; set; }
+        public string Url { get; set; }
     }
 }

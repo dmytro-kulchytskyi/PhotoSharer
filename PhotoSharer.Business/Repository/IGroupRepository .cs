@@ -6,10 +6,11 @@ namespace PhotoSharer.Business.Repository
 {
     public interface IGroupRepository : IRepository<AppGroup>
     {
-        IList<AppGroup> GetByUserId(Guid userId, int skip = 0, int take = 0);
-        bool AddUser(Guid userId, Guid groupId);
-        AppGroup GetByLink(string groupLink);
-        Guid GetIdByLink(string groupLink);
-        IList<AppGroup> GetCreatedByUser(Guid userId);
+        void Save(AppGroup group, Guid creatorId);
+        IList<AppGroup> GetGroupsByUserId(Guid userId, int skip = 0, int take = 0);
+        void AddUser(Guid userId, Guid groupId);
+        void RemoveUserFromGroup(Guid userId, Guid groupId);
+        AppGroup GetGroupByGroupInfo(Guid groupId, string groupLink);
+        IList<AppGroup> GetGroupsCreatedByUser(Guid userId, int skip = 0, int take = 0);
     }
 }

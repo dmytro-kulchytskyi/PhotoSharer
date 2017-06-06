@@ -1,4 +1,5 @@
 ﻿using PhotoSharer.Business.Entities;
+using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Repository;
 using System;
 using System.Collections.Generic;
@@ -19,66 +20,58 @@ namespace PhotoSharer.Business.Services
 
         public IList<AppGroup> GetUserGroups(Guid userId)
         {
-            return groupRepository.GetByUserId(userId);
+            return groupRepository.GetGroupsByUserId(userId);
         }
 
         public AppGroup CreateGroup(string groupName, Guid creatorId)
         {
-            var creator = userService.GetById(creatorId);
-            if (creator == null)
-            {
-                return null;
-            }
+            if (!userService.IsUserExists(creatorId))
+                throw new ArgumentException("Can't find owner by id.");
 
-            AppGroup group = new AppGroup()
+            var group = new AppGroup()
             {
+                Id = Guid.NewGuid(),
                 Name = groupName,
-                Link = "group-" + Guid.NewGuid().ToString(),
+                Link = UrlManager.GetSafeString(groupName),
                 CreatorId = creatorId
             };
-            
-            var groupId = groupRepository.Save(group);
 
-            if (groupId == null || groupId == Guid.Empty)
-            {
-                return null;
-            }
-
-            var addUserResult = groupRepository.AddUser(creatorId, groupId);
-
-            if (!addUserResult)
-            {
-                groupRepository.Delete(group);
-                return null;
-            }
+            groupRepository.Save(group, creatorId);
 
             return group;
         }
 
-
-        public bool AddUser(Guid userId, string groupUrl)
+        public bool IsGroupExists(Guid groupId)
         {
-            var groupId = groupRepository.GetIdByLink(groupUrl);
-            if (groupId == null || groupId == Guid.Empty)
-            {
-                return false;
-            }
+            return groupRepository.IsExists(groupId);
+        }
 
-            return groupRepository.AddUser(userId, groupId);
+        public void AddUser(Guid userId, Guid groupId)
+        {
+            if (!IsGroupExists(groupId))
+                throw new ArgumentException("No such group");
+
+            if (!userService.IsUserExists(userId))
+                throw new ArgumentException("No such user");
+
+            groupRepository.AddUser(userId, groupId);
+        }
+
+        public void RemoveUser(Guid userId, Guid groupId)
+        {
+            groupRepository.RemoveUserFromGroup(userId, groupId);
         }
 
         public IList<AppGroup> GetCreatedByUser(Guid userId)
         {
-            var groups = groupRepository.GetCreatedByUser(userId);
+            var groups = groupRepository.GetGroupsCreatedByUser(userId);
 
             return groups;
         }
 
-        public AppGroup GetByLink(string groupLink)
+        public AppGroup GetByGroupInfo(Guid groupId, string groupLink)
         {
-            var group = groupRepository.GetByLink(groupLink);
-
-            return group;
+            return groupRepository.GetGroupByGroupInfo(groupId, groupLink);
         }
     }
 }

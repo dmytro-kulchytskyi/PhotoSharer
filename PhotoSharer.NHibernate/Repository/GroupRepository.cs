@@ -6,6 +6,7 @@ using PhotoSharer.Business.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PhotoSharer.Nhibernate.Repository
 {
@@ -19,43 +20,52 @@ namespace PhotoSharer.Nhibernate.Repository
             this.sessionFactory = sessionFactory;
         }
 
-
-
-        public AppGroup GetByLink(string groupLink)
+        public void Save(AppGroup group, Guid creatorId)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var group = session.QueryOver<AppGroup>().Where(url => url.Link == groupLink).SingleOrDefault();
+                if (group.CreatorId != creatorId)
+                    throw new ArgumentException("CreatorId field values ​​don't match");
+
+                var groupMember = new GroupMember
+                {
+                    UserId = creatorId,
+                    GroupId = group.Id
+                };
+
+                using (var transaction = session.BeginTransaction())
+                {
+                    try
+                    {
+                        session.Save(group);
+                        session.Save(groupMember);
+                        transaction.Commit();
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public AppGroup GetGroupByGroupInfo(Guid groupId, string groupLink)
+        {
+            using (var session = sessionFactory.OpenSession())
+            {
+                var group = session.QueryOver<AppGroup>().Where(it => it.Id == groupId && it.Link == groupLink)
+                    .SingleOrDefault();
+
                 return group;
             }
 
         }
 
-        public Guid GetIdByLink(string groupLink)
+        public void AddUser(Guid userId, Guid groupId)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var groupId = session.Query<AppGroup>().Where(_group => _group.Link == groupLink)
-                            .Select(_group => _group.Id).SingleOrDefault();
-
-                return groupId;
-            }
-        }
-
-
-        public bool AddUser(Guid userId, Guid groupId)
-        {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var isUniq = session.QueryOver<GroupMember>().Where(_groupMember =>
-                          _groupMember.UserId == userId &&
-                          _groupMember.GroupId == groupId).RowCount() == 0;
-
-                if (!isUniq)
-                {
-                    return false;
-                }
-
                 var groupMember = new GroupMember
                 {
                     UserId = userId,
@@ -67,12 +77,10 @@ namespace PhotoSharer.Nhibernate.Repository
                     session.Save(groupMember);
                     transaction.Commit();
                 }
-
-                return true;
             }
         }
 
-        public IList<AppGroup> GetByUserId(Guid userId, int skip = 0, int take = 0)
+        public IList<AppGroup> GetGroupsByUserId(Guid userId, int skip = 0, int take = 0)
         {
             using (var session = sessionFactory.OpenSession())
             {
@@ -84,47 +92,46 @@ namespace PhotoSharer.Nhibernate.Repository
                     .Add(Subqueries.PropertyIn("Id", groupIds));
 
                 if (skip > 0)
-                {
                     groupsCriteria.SetFirstResult(skip);
-                }
+
 
                 if (take > 0)
-                {
                     groupsCriteria.SetMaxResults(take);
-                }
 
                 return groupsCriteria.List<AppGroup>();
             }
         }
 
-        public IList<AppGroup> GetCreatedByUser(Guid userId)
+        public IList<AppGroup> GetGroupsCreatedByUser(Guid userId, int skip = 0, int take = 0)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var groups = session.QueryOver<AppGroup>()
-                        .Where(group => group.CreatorId == userId).List();
+                IQueryOver<AppGroup> groups = session.QueryOver<AppGroup>()
+                        .Where(it => it.CreatorId == userId);
 
-                return groups;
+                if (skip > 0)
+                    groups = groups.Skip(skip);
+
+                if (take > 0)
+                    groups = groups.Take(take);
+
+                return groups.List();
             }
         }
 
-
-        public IList<AppGroup> GetByUserIdAndCheckIfCreator(Guid userId, int skip = 0, int take = 0)
+        public void RemoveUserFromGroup(Guid userId, Guid groupId)
         {
             using (var session = sessionFactory.OpenSession())
             {
-                var user = session.Get<AppUser>(userId);
-                if (user == null) return null;
+                var member = session.Query<GroupMember>().Where(it => it.UserId == userId && it.GroupId == groupId).SingleOrDefault();
+                if (member == null)
+                    throw new ArgumentException("There is no such bundle of userId and groupId");
 
-                var groups = user.Groups.Skip(skip);
-                if (take > 0)
-                {   
-                    groups = groups.Take(take);
+                using (var transaction = session.BeginTransaction())
+                {
+                    session.Delete(member);
+                    transaction.Commit();
                 }
-                var filteredGroups = groups.Where(g => g.CreatorId == user.Id).ToList();
-
-                return filteredGroups;
-
             }
         }
     }

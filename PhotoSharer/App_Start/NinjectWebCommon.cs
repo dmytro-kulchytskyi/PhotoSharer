@@ -81,7 +81,7 @@ namespace PhotoSharer.Web.App_Start
                 var configuration = new Configuration();
                 configuration.Configure();
                 configuration.AddAssembly(typeof(AppUser).Assembly);
-                configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, 
+                configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString,
                     System.Configuration.ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString);
 
                 var sessionFactory = configuration.BuildSessionFactory();
@@ -92,9 +92,9 @@ namespace PhotoSharer.Web.App_Start
 
             kernel.Bind<IAuthenticationManager>().ToMethod(_ => HttpContext.Current.GetOwinContext().Authentication);
 
-            kernel.Bind<IUserRepository>().To<userRepository>();
+            kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<IGroupRepository>().To<GroupRepository>();
-            kernel.Bind<ILoginRepository>().To<LoginRepository>();
+            kernel.Bind<IPhotoStreamRepository>().To<PhotoStreamRepository>();
 
             kernel.Bind<IUserStore<AppUser, Guid>>().To<AppUserStore>();
 

@@ -9,6 +9,8 @@ namespace PhotoSharer.Business.Entities
     {
         public virtual Guid Id { get; set; }
         public virtual string UserName { get; set; }
+        public virtual string LoginProvider { get; set; }
+        public virtual string ProviderKey { get; set; }
 
         private IList<AppGroup> groups;
         public virtual IList<AppGroup> Groups
@@ -18,16 +20,6 @@ namespace PhotoSharer.Business.Entities
                 return groups ?? (groups = new List<AppGroup>());
             }
             set { groups = value; }
-        }
-
-        private IList<Login> logins;
-        public virtual IList<Login> Logins
-        {
-            get
-            {
-                return logins ?? (logins = new List<Login>());
-            }
-            set { logins = value; }
         }
     }
 }

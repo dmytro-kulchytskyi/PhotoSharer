@@ -24,26 +24,34 @@ namespace PhotoSharer.Business.Services
             this.userStore = userStore;
         }
 
-
         public AppUser GetById(Guid id)
         {
             return userRepository.GetById(id);
         }
 
-        public AppUser GetById(string id)
+        public AppUser CreateUser(string userName, UserLoginInfo loginInfo)
         {
-            var userId = Guid.Parse(id);
-            return GetById(id);
-        }
+            var user = new AppUser
+            {
+                Id = Guid.NewGuid(),
+                UserName = userName,
+                LoginProvider = loginInfo.LoginProvider,
+                ProviderKey = loginInfo.ProviderKey
+            };
 
-        public async Task<AppUser> CreateUserAsync(string userName)
-        {
-            var user = new AppUser { UserName = userName };
-            await userStore.CreateAsync(user);
-            if (user.Id == null || user.Id == Guid.Empty)
-                return null;
+            userRepository.Save(user);
 
             return user;
+        }
+
+        public bool IsUserExists(Guid userId)
+        {
+            return userRepository.IsExists(userId);
+        }
+
+        public bool IsInGroup(Guid userId, Guid groupId)
+        {
+            return userRepository.IsUserInGroup(userId, groupId);
         }
     }
 }

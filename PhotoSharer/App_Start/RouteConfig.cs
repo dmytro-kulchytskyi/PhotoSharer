@@ -11,18 +11,48 @@ namespace PhotoSharer.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            
-            
             routes.MapRoute(
-             name: "Group",
-                url: "Group/{link}",
+             name: "Details",
+                url: "group-{id}-{link}",
                 defaults: new
                 {
                     controller = "Groups",
-                    action = "Group",
+                    action = "Details",
                 },
                 namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
-                
+            );
+
+            routes.MapRoute(
+            name: "MyPhotoStreams",
+               url: "group-{id}-{link}/MyStreams",
+               defaults: new
+               {
+                   controller = "Groups",
+                   action = "MyPhotoStreams",
+               },
+               namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
+           );
+
+            routes.MapRoute(
+             name: "MyGroups",
+                url: "MyGroups",
+                defaults: new
+                {
+                    controller = "Groups",
+                    action = "MyGroups",
+                },
+                namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
+            );
+
+            routes.MapRoute(
+             name: "OwnGroups",
+                url: "OwnGroups",
+                defaults: new
+                {
+                    controller = "Groups",
+                    action = "OwnGroups",
+                },
+                namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
             );
 
             routes.MapRoute(
@@ -31,7 +61,7 @@ namespace PhotoSharer.Web
                 defaults: new
                 {
                     controller = "Groups",
-                    action = "Index",
+                    action = "MyGroups",
                     id = UrlParameter.Optional,
                 },
                 namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
