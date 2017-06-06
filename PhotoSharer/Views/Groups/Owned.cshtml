@@ -1,12 +1,12 @@
 ﻿@model IList<PhotoSharer.MVC.ViewModels.Groups.GroupListPageItemViewModel>
 @{
-    ViewBag.Title = "Administration";
+    ViewBag.Title = "Owned";
 }
 
-<h2>Administration</h2>
+<h2>Owned</h2>
 <ul class="nav nav-pills">
-    <li role="presentation">@Html.ActionLink("My groups", "Index", "Groups")</li>
-    <li role="presentation" class="active">@Html.ActionLink("Administration", "Administration", "Groups")</li>
+    <li role="presentation">@Html.ActionLink("My", "My", "Groups")</li>
+    <li role="presentation" class="active">@Html.ActionLink("Owned", "Owned", "Groups")</li>
 </ul>
 <hr />
 @if (Model.Count == 0)

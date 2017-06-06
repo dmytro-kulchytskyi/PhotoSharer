@@ -31,7 +31,7 @@ namespace PhotoSharer.Web
                 defaults: new
                 {
                     controller = "Groups",
-                    action = "Index",
+                    action = "My",
                     id = UrlParameter.Optional,
                 },
                 namespaces: new string[] { "PhotoSharer.MVC.Controllers" }

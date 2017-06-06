@@ -194,10 +194,10 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Properties.cshtml" />
-    <Content Include="Views\Groups\Index.cshtml" />
+    <Content Include="Views\Groups\My.cshtml" />
     <Content Include="Views\Account\AddAccount.cshtml" />
     <Content Include="Views\Groups\Group.cshtml" />
-    <Content Include="Views\Groups\Administration.cshtml" />
+    <Content Include="Views\Groups\Owned.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\LoginError.cshtml" />
     <None Include="Web.Debug.config">

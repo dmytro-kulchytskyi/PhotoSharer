@@ -22,7 +22,7 @@ namespace PhotoSharer.MVC.Controllers
 
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult My()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
             var groups = groupsService.GetUserGroups(userId);
@@ -43,7 +43,7 @@ namespace PhotoSharer.MVC.Controllers
 
 
         [HttpGet]
-        public ActionResult Administration()
+        public ActionResult Owned()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
             var groups = groupsService.GetCreatedByUser(userId);
