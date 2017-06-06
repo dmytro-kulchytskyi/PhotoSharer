@@ -18,11 +18,11 @@
                 </button>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    @Html.ActionLink("Hello " + User.Identity.Name, "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Hello " + User.Identity.Name, "My", "Groups", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 else
                 {
-                    @Html.ActionLink("Home", "Index", "Groups", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Home", "My", "Groups", new { area = "" }, new { @class = "navbar-brand" })
                 }
             </div>
             <div class="navbar-collapse collapse">
