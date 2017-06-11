@@ -6,7 +6,6 @@ namespace PhotoSharer.Business.Repository
 {
     public interface IGroupRepository : IRepository<AppGroup>
     {
-        void Save(AppGroup group, Guid creatorId);
         IList<AppGroup> GetGroupsByUserId(Guid userId, int skip = 0, int take = 0);
         void AddUser(Guid userId, Guid groupId);
         void RemoveUserFromGroup(Guid userId, Guid groupId);

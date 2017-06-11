@@ -1,7 +1,7 @@
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PhotoSharer.Web.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(PhotoSharer.Web.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PhotoSharer.MVC.NInject.IOC), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(PhotoSharer.MVC.NInject.IOC), "Stop")]
 
-namespace PhotoSharer.Web.App_Start
+namespace PhotoSharer.MVC.NInject
 {
     using System;
     using System.Web;
@@ -10,19 +10,18 @@ namespace PhotoSharer.Web.App_Start
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using Ninject;
     using Ninject.Web.Common;
-    using NHibernate;
-    using NHibernate.Tool.hbm2ddl;
-    using NHibernate.Cfg;
     using Microsoft.Owin.Security;
     using PhotoSharer.Nhibernate.Repository;
     using PhotoSharer.Business.Repository;
     using PhotoSharer.Business.Entities;
     using PhotoSharer.Business.Managers;
     using PhotoSharer.Business.Stores;
+    using PhotoSharer.Nhibernate;
+    using PhotoSharer.Business;
 
-    public static class NinjectWebCommon
+    public static class IOC
     {
-        public static T GetService<T>()
+        public static T Resolve<T>()
             where T : class
         {
             return (T)bootstrapper.Kernel.GetService(typeof(T));
@@ -76,19 +75,7 @@ namespace PhotoSharer.Web.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ISessionFactory>().ToMethod(_ =>
-            {
-                var configuration = new Configuration();
-                configuration.Configure();
-                configuration.AddAssembly(typeof(AppUser).Assembly);
-                configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString,
-                    System.Configuration.ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString);
-
-                var sessionFactory = configuration.BuildSessionFactory();
-                new SchemaUpdate(configuration).Execute(true, true);
-                return sessionFactory;
-
-            }).InSingletonScope();
+            kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();
 
             kernel.Bind<IAuthenticationManager>().ToMethod(_ => HttpContext.Current.GetOwinContext().Authentication);
 
@@ -100,7 +87,6 @@ namespace PhotoSharer.Web.App_Start
 
             kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
             kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
-
         }
     }
 }

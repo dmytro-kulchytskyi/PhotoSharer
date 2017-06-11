@@ -4,49 +4,36 @@ using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
 using NHibernate.Linq;
 using System.Linq;
+using PhotoSharer.Business;
 
 namespace PhotoSharer.Nhibernate.Repository
 {
     public class UserRepository : Repository<AppUser>, IUserRepository
     {
-        private ISessionFactory sessionFactory;
-
-        public UserRepository(ISessionFactory sessionFactory)
-            : base(sessionFactory)
+        public UserRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.sessionFactory = sessionFactory;
+            this.unitOfWork = (UnitOfWork)unitOfWork;
         }
+
+        private UnitOfWork unitOfWork;
+
+        private ISession session { get => unitOfWork.Session; }
 
         public AppUser GetUserByUserName(string userName)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var user = session.QueryOver<AppUser>()
-                    .Where(u => u.UserName == userName).SingleOrDefault();
-
-                return user;
-            }
+            return session.QueryOver<AppUser>()
+                .Where(u => u.UserName == userName).SingleOrDefault();
         }
-        
+
         public AppUser GetUserByLoginInfo(string loginProvider, string providerKey)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var user = session.QueryOver<AppUser>()
-                    .Where(it => it.LoginProvider == loginProvider && it.ProviderKey == providerKey).SingleOrDefault();
-
-                return user;
-            }
+            return session.QueryOver<AppUser>()
+                .Where(it => it.LoginProvider == loginProvider && it.ProviderKey == providerKey).SingleOrDefault();
         }
 
         public bool IsUserInGroup(Guid userId, Guid groupId)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var result = session.Query<GroupMember>().Any(it => it.UserId == userId && it.GroupId == groupId);
-
-                return result;
-            }
+            return session.Query<GroupMember>().Any(it => it.UserId == userId && it.GroupId == groupId);
         }
     }
 }

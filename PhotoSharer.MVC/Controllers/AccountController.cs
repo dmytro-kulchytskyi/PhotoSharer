@@ -8,27 +8,28 @@ using PhotoSharer.Business.Entities;
 using System.Web;
 using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Services;
+using PhotoSharer.Business;
+using PhotoSharer.MVC.NInject;
 
 namespace PhotoSharer.MVC.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly IAuthenticationManager authenticationManager;
+
         private readonly SignInManager<AppUser, Guid> signInManager;
+
         private readonly AppUserManager userManager;
+
         private readonly UserService userService;
 
-        public AccountController(
-            IAuthenticationManager authenticationManager,
-            SignInManager<AppUser, Guid> signInManager,
-            AppUserManager userManager,
-            UserService userService)
+        public AccountController()
         {
-            this.userService = userService;
-            this.authenticationManager = authenticationManager;
-            this.signInManager = signInManager;
-            this.userManager = userManager;
+            userService = IOC.Resolve<UserService>();
+            authenticationManager = IOC.Resolve<IAuthenticationManager>();
+            signInManager = IOC.Resolve<SignInManager<AppUser, Guid>>();
+            userManager = IOC.Resolve<AppUserManager>();
         }
 
         public ActionResult Test()
@@ -76,6 +77,7 @@ namespace PhotoSharer.MVC.Controllers
 
                     var user = userService.CreateUser(userName, loginInfo.Login);
                     await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
 
                     return RedirectToLocal(returnUrl);
             }

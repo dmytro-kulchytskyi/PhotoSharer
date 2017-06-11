@@ -36,7 +36,9 @@ namespace PhotoSharer.Business.Services
                 CreatorId = creatorId
             };
 
-            groupRepository.Save(group, creatorId);
+            groupRepository.Save(group);
+
+            groupRepository.AddUser(creatorId, group.Id);
 
             return group;
         }

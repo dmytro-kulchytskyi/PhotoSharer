@@ -85,6 +85,7 @@
     <Compile Include="Entities\GroupMember.cs" />
     <Compile Include="Entities\Interfaces\IEntity.cs" />
     <Compile Include="Entities\PhotoStream.cs" />
+    <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Managers\AppUserManager.cs" />
     <Compile Include="Managers\UrlManager.cs" />
     <Compile Include="Repository\IGroupRepository .cs" />

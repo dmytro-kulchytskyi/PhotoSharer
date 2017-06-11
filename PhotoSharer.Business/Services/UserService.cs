@@ -12,12 +12,12 @@ namespace PhotoSharer.Business.Services
     public class UserService
     {
         private readonly IUserRepository userRepository;
+
         private readonly AppUserManager userManager;
+
         private readonly AppUserStore userStore;
 
-        public UserService(IUserRepository userRepository,
-                           AppUserManager userManager,
-                           AppUserStore userStore)
+        public UserService(IUserRepository userRepository, AppUserManager userManager, AppUserStore userStore)
         {
             this.userManager = userManager;
             this.userRepository = userRepository;
@@ -38,7 +38,6 @@ namespace PhotoSharer.Business.Services
                 LoginProvider = loginInfo.LoginProvider,
                 ProviderKey = loginInfo.ProviderKey
             };
-
             userRepository.Save(user);
 
             return user;

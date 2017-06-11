@@ -5,60 +5,41 @@ using PhotoSharer.Business.Repository;
 using NHibernate.Linq;
 using System.Linq;
 using System.Collections.Generic;
+using PhotoSharer.Business;
 
 namespace PhotoSharer.Nhibernate.Repository
 {
     public class PhotoStreamRepository : Repository<PhotoStream>, IPhotoStreamRepository
     {
-        private ISessionFactory sessionFactory;
-
-        public PhotoStreamRepository(ISessionFactory sessionFactory)
-            : base(sessionFactory)
+        public PhotoStreamRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            this.sessionFactory = sessionFactory;
+            this.unitOfWork = (UnitOfWork)unitOfWork;
         }
+
+        private UnitOfWork unitOfWork;
+
+        private ISession session { get => unitOfWork.Session; }
 
         public Guid GetCreatorId(Guid photoStreamId)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var result = session.Query<PhotoStream>().Where(it => it.Id == photoStreamId).Select(it => it.CreatorId).SingleOrDefault();
-
-                return result;
-            }
+            return session.Query<PhotoStream>().Where(it => it.Id == photoStreamId).Select(it => it.CreatorId).SingleOrDefault();
         }
 
         public IList<PhotoStream> GetGroupPhotoStreams(Guid groupId)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var result = session.QueryOver<PhotoStream>()
-                    .Where(it => it.GroupId == groupId).List();
-
-                return result;
-            }
+            return session.QueryOver<PhotoStream>().Where(it => it.GroupId == groupId).List();
         }
 
         public IList<PhotoStream> GetGroupPhotoStreamsByUserId(Guid groupId, Guid userId)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var result = session.QueryOver<PhotoStream>()
-                    .Where(it => it.GroupId == groupId && it.CreatorId == userId).List();
-
-                return result;
-            }
+            return session.Query<PhotoStream>()
+                             .Where(it => it.GroupId == groupId && it.CreatorId == userId).ToList();
         }
 
         public bool IsExists(Guid groupId, string provider, string url)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var result = session.Query<PhotoStream>()
+               return session.Query<PhotoStream>()
                     .Any(it => it.GroupId == groupId && it.Provider == provider && it.Url == url);
-
-                return result;
-            }
         }
     }
 }

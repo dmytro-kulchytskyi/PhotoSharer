@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNet.Identity;
+using PhotoSharer.Business;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
 using PhotoSharer.Business.Services;
 using PhotoSharer.MVC.Helpers;
+using PhotoSharer.MVC.NInject;
 using PhotoSharer.MVC.ViewModels.Groups;
 using System;
 using System.Collections.Generic;
@@ -13,19 +15,19 @@ using System.Web.Mvc;
 namespace PhotoSharer.MVC.Controllers
 {
     [Authorize]
-    public class GroupsController : Controller
+    public class GroupsController : BaseController
     {
         private readonly GroupsService groupsService;
+
         private readonly UserService userService;
+
         private readonly PhotoStreamService photoStreamService;
 
-        public GroupsController(GroupsService groupsService,
-                                UserService userService,
-                                PhotoStreamService photoStreamService)
+        public GroupsController()
         {
-            this.groupsService = groupsService;
-            this.userService = userService;
-            this.photoStreamService = photoStreamService;
+            groupsService = IOC.Resolve<GroupsService>();
+            userService = IOC.Resolve<UserService>();
+            photoStreamService = IOC.Resolve<PhotoStreamService>();
         }
 
         [HttpGet]
@@ -87,7 +89,6 @@ namespace PhotoSharer.MVC.Controllers
         public ActionResult JoinGroup(Guid groupId, string groupLink)
         {
             var userId = IdentityHelper.UserId;
-
             groupsService.AddUser(userId, groupId);
             return RedirectToRoute("Details", new { id = groupId, link = groupLink });
         }
@@ -99,6 +100,7 @@ namespace PhotoSharer.MVC.Controllers
             var userId = IdentityHelper.UserId;
 
             groupsService.RemoveUser(userId, groupId);
+
             return RedirectToRoute("Details", new { id = groupId, link = groupLink });
         }
 
@@ -115,6 +117,7 @@ namespace PhotoSharer.MVC.Controllers
                 return View(model);
 
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
+
             return RedirectToRoute("Details", new { id = group.Id, link = group.Link });
         }
 
@@ -168,7 +171,7 @@ namespace PhotoSharer.MVC.Controllers
             if (!userService.IsInGroup(IdentityHelper.UserId, model.GroupId))
                 return RedirectToAction("MyGroups", "Groups");
 
-            if(photoStreamService.IsInGroup(model.GroupId, model.Provider, model.Url))
+            if (photoStreamService.IsInGroup(model.GroupId, model.Provider, model.Url))
                 return RedirectToAction("MyGroups", "Groups");
 
             photoStreamService.CreatePhotoStream(IdentityHelper.UserId, model.GroupId, model.Provider, model.Url);

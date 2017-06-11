@@ -56,16 +56,15 @@ namespace PhotoSharer.Web
             );
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
+               name: "Default",
+               url: "{controller}/{action}",
                 defaults: new
                 {
                     controller = "Groups",
-                    action = "MyGroups",
-                    id = UrlParameter.Optional,
+                    action = "MyGroups"
                 },
                 namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
-            );
+               );
 
             routes.MapRoute(
                name: "404",

@@ -11,12 +11,12 @@ namespace PhotoSharer.Business.Services
     public class PhotoStreamService
     {
         private readonly UserService userService;
+
         private readonly GroupsService groupsService;
+
         private readonly IPhotoStreamRepository photoStreamRepository;
 
-        public PhotoStreamService(UserService userService,
-                                  GroupsService groupsService,
-                                  IPhotoStreamRepository photoStreamRepository)
+        public PhotoStreamService(UserService userService, GroupsService groupsService, IPhotoStreamRepository photoStreamRepository)
         {
             this.userService = userService;
             this.groupsService = groupsService;
@@ -44,7 +44,7 @@ namespace PhotoSharer.Business.Services
                 Url = url,
                 CreatorId = userId,
                 //-------------TODO----------------
-                AccountName=Guid.NewGuid().ToString(),
+                AccountName = Guid.NewGuid().ToString(),
                 ExteralId = Guid.NewGuid().ToString()
             };
 

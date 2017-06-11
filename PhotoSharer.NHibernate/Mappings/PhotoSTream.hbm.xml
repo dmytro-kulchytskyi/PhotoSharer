@@ -3,7 +3,7 @@
   <class name="PhotoStream" table="PhotoStreams" dynamic-update="true" >
     <cache usage="read-write"/>
 
-    <id name="Id" column="PhotoStreamId" type="guid" />
+    <id name="Id" column="PhotoStreamId" type="guid" generator="assigned" />
 
     <property name="Url" unique="true" not-null="true"/>
     <property name="Provider" unique-key="providerInfo" not-null="true"/>

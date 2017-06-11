@@ -18,9 +18,20 @@ namespace PhotoSharer.MVC.Helpers
                     throw new HttpException("No HttpContext");
 
                 if (!HttpContext.Current.User.Identity.IsAuthenticated)
-                    throw new HttpException("User not authenticated");
+                    return Guid.Empty;
 
-                    return Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+                return Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
+            }
+        }
+
+        public static bool IsAuthenticated
+        {
+            get
+            {
+                if (HttpContext.Current == null)
+                    throw new HttpException("No HttpContext");
+
+                return HttpContext.Current.User.Identity.IsAuthenticated;
             }
         }
     }

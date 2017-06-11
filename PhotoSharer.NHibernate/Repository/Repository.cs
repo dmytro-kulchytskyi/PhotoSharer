@@ -1,6 +1,7 @@
 ﻿using NHibernate;
 using NHibernate.Linq;
 using NHibernate.Util;
+using PhotoSharer.Business;
 using PhotoSharer.Business.Entities.Interfaces;
 using PhotoSharer.Business.Repository;
 using System;
@@ -11,79 +12,45 @@ namespace PhotoSharer.Nhibernate.Repository
     public abstract class Repository<T> : IRepository<T>
         where T : class, IEntity
     {
-        private ISessionFactory sessionFactory;
-
-        public Repository(ISessionFactory sessionFactory)
+        public Repository(IUnitOfWork unitOfWork)
         {
-            this.sessionFactory = sessionFactory;
+            this.unitOfWork = (UnitOfWork)unitOfWork;
         }
+
+        private UnitOfWork unitOfWork;
+
+        private ISession session { get => unitOfWork.Session; }
 
         public virtual T GetById(Guid id)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                return session.Get<T>(id);
-            }
+            return session.Get<T>(id);
         }
 
         public virtual void Save(T instance)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                using (var transaction = session.BeginTransaction())
-                {
-                    session.Save(instance);
-                    transaction.Commit();
-                }
-            }
+            session.Save(instance);
         }
-        
+
+
         public virtual void Update(T instance)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                using (var transaction = session.BeginTransaction())
-                {
-                    session.Update(instance);
-                    transaction.Commit();
-                }
-            }
+            session.Update(instance);
         }
-        
+
         public virtual void Delete(T instance)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                using (var transaction = session.BeginTransaction())
-                {
-                    session.Delete(instance);
-                    transaction.Commit();
-                }
-            }
+            session.Delete(instance);
         }
 
         public virtual bool IsExists(Guid id)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                var result = session.Query<T>().Any(it => it.Id == id);
-
-                return result;
-            }
+            return session.Query<T>().Any(it => it.Id == id);
         }
 
         public void Delete(Guid id)
         {
-            using (var session = sessionFactory.OpenSession())
-            {
-                using (var transaction = session.BeginTransaction())
-                {
-                    var instance = session.Get<T>(id);
-                    session.Delete(instance);
-
-                    transaction.Commit();
-                }
-            }
+            var instance = session.Load<T>(id);
+            session.Delete(instance);
         }
     }
 }
