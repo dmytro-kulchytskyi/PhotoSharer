@@ -11,7 +11,7 @@ namespace PhotoSharer.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            routes.MapRoute(
+             routes.MapRoute(
              name: "Details",
                 url: "group-{id}-{link}",
                 defaults: new

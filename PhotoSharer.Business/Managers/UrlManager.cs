@@ -6,7 +6,7 @@ namespace PhotoSharer.Business.Managers
     {
         public static string GetSafeString(string line)
         {
-            var result = Regex.Replace(line, @"\W+", "-").Trim('-');
+            var result = Regex.Replace(line, @"\W+", "_").Trim('_');
 
             if (string.IsNullOrWhiteSpace(result))
                 result = "_";
