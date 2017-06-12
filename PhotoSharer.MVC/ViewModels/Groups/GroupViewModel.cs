@@ -12,6 +12,5 @@ namespace PhotoSharer.MVC.ViewModels.Groups
         public bool IsMember { get; set; }
         public bool IsCreator { get; set; }
         public string Name { get; set; }
-        public string Link { get; set; }
     }
 }

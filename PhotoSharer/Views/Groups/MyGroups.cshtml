@@ -22,7 +22,7 @@ else
                     @foreach (var group in Model)
                     {
                         <tr>
-                            <td>@Html.RouteLink(group.Name, "GroupDetails", new { id = group.Id, link = group.Link })</td>
+                            <td>@Html.RouteLink(group.Name, "GroupDetails", new { id = group.Id, link = group.Name })</td>
                         </tr>
                     }
                 </tbody>

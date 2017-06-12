@@ -11,7 +11,7 @@
     <property name="AccountName" not-null="false" />
 
     <property name="GroupId" unique-key="providerInfo" not-null="true" />
-    <property name="CreatorId" not-null="true" />
+    <property name="OwnerId" not-null="true" />
      
   </class>
 </hibernate-mapping>

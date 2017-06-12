@@ -20,7 +20,7 @@
             </td>
             <td>
                 @using (Html.BeginForm("DeletePhotoStream", "Groups", 
-                    new { streamId = item.Id,  returnGroupId = Model.GroupId, returnGroupLink = Model.GroupLink }))
+                    new { streamId = item.Id,  returnGroupId = Model.GroupId, returnGroupLink = Model.GroupName }))
                 {
                     @Html.AntiForgeryToken()
                     <input type="submit" class="btn btn-danger" value="Delete" />
@@ -31,7 +31,7 @@
     <tr>
         @{
             var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-            using (Html.BeginForm("AddPhotoStream", "Groups", new { returnGroupId = Model.GroupId, returnGroupLink = Model.GroupLink }))
+            using (Html.BeginForm("AddPhotoStream", "Groups", new { returnGroupId = Model.GroupId, returnGroupLink = Model.GroupName }))
             {
                 @Html.AntiForgeryToken()
 
@@ -51,4 +51,4 @@
 
 </table>
 
-@Html.RouteLink("Back", "GroupDetails", new { id = Model.GroupId, link = Model.GroupLink })
+@Html.RouteLink("Back", "GroupDetails", new { id = Model.GroupId, link = Model.GroupName })

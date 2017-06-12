@@ -22,12 +22,7 @@ namespace PhotoSharer.Nhibernate.Repository
         private ISession session { get => unitOfWork.Session; }
 
         
-
-        public AppGroup GetGroupByGroupInfo(Guid groupId, string groupLink)
-        {
-            return session.Query<AppGroup>().SingleOrDefault(it => it.Id == groupId && it.Link == groupLink);
-        }
-
+ 
         public void AddUser(Guid userId, Guid groupId)
         {
             var groupMember = new GroupMember
@@ -62,7 +57,7 @@ namespace PhotoSharer.Nhibernate.Repository
         public IList<AppGroup> GetGroupsCreatedByUser(Guid userId, int skip = 0, int take = 0)
         {
             IQueryOver<AppGroup> groups = session.QueryOver<AppGroup>()
-                    .Where(it => it.CreatorId == userId);
+                    .Where(it => it.OwnerId == userId);
 
             if (skip > 0)
                 groups = groups.Skip(skip);

@@ -7,7 +7,8 @@ namespace PhotoSharer.MVC.ViewModels.Groups
     {
         [Required]
         [Display(Name = "Group name")]
-        [StringLength(100, ErrorMessage = "The maximum length is {1}")]
+        [StringLength(100, ErrorMessage = "The maximum length is {1}!")]
+        [RegularExpression(@"(\w|\d| )+", ErrorMessage = "{0} can contains only letters and digits!")]
         public string Name { get; set; }
     }
 }

@@ -20,7 +20,6 @@ namespace PhotoSharer.MVC.Helpers
 
                 cfg.CreateMap<AppGroup, PhotoStreamsListViewModel>()
                     .ForMember(it => it.GroupName, option => option.MapFrom(it => it.Name))
-                    .ForMember(it => it.GroupLink, option => option.MapFrom(it => it.Link))
                     .ForMember(it => it.GroupId, option => option.MapFrom(it => it.Id));
             });
         }

@@ -11,7 +11,6 @@ namespace PhotoSharer.Business.Entities
         public virtual string UserName { get; set; }
         public virtual string LoginProvider { get; set; }
         public virtual string ProviderKey { get; set; }
-
         public virtual IList<AppGroup> Groups { get; set; }
     }
 }

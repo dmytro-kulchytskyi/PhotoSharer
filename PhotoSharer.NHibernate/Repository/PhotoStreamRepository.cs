@@ -22,7 +22,7 @@ namespace PhotoSharer.Nhibernate.Repository
 
         public Guid GetCreatorId(Guid photoStreamId)
         {
-            return session.Query<PhotoStream>().Where(it => it.Id == photoStreamId).Select(it => it.CreatorId).SingleOrDefault();
+            return session.Query<PhotoStream>().Where(it => it.Id == photoStreamId).Select(it => it.OwnerId).SingleOrDefault();
         }
 
         public IList<PhotoStream> GetGroupPhotoStreams(Guid groupId)
@@ -33,7 +33,7 @@ namespace PhotoSharer.Nhibernate.Repository
         public IList<PhotoStream> GetGroupPhotoStreamsByUserId(Guid groupId, Guid userId)
         {
             return session.Query<PhotoStream>()
-                             .Where(it => it.GroupId == groupId && it.CreatorId == userId).ToList();
+                             .Where(it => it.GroupId == groupId && it.OwnerId == userId).ToList();
         }
 
         public bool IsExists(Guid groupId, string provider, string url)

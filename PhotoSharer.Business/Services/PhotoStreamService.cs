@@ -42,7 +42,7 @@ namespace PhotoSharer.Business.Services
                 GroupId = groupId,
                 Provider = provider,
                 Url = url,
-                CreatorId = userId,
+                OwnerId = userId,
                 //-------------TODO----------------
                 AccountName = Guid.NewGuid().ToString(),
                 ExteralId = Guid.NewGuid().ToString()

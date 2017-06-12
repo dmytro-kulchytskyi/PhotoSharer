@@ -87,7 +87,6 @@
     <Compile Include="Entities\PhotoStream.cs" />
     <Compile Include="IUnitOfWork.cs" />
     <Compile Include="Managers\AppUserManager.cs" />
-    <Compile Include="Managers\UrlManager.cs" />
     <Compile Include="Repository\IGroupRepository .cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\IPhotoStreamRepository.cs" />

@@ -17,6 +17,6 @@ namespace PhotoSharer.Business.Entities
         public virtual string AccountName { get; set; }
 
         public virtual Guid GroupId { get; set; }
-        public virtual Guid CreatorId { get; set; }
+        public virtual Guid OwnerId { get; set; }
     }
 }

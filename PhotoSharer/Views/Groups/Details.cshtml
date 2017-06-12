@@ -9,7 +9,7 @@
     <div>
         @if (!Model.IsMember)
         {
-            using (Html.BeginForm("JoinGroup", "Groups", new { groupId = Model.Id, groupLink = Model.Link }))
+            using (Html.BeginForm("JoinGroup", "Groups", new { groupId = Model.Id, groupLink = Model.Name }))
             {
                 @Html.AntiForgeryToken()
                 <input type="submit" value="Join Group" class="btn btn-success" />
@@ -17,12 +17,12 @@
         }
         else
         {
-            using (Html.BeginForm("LeaveGroup", "Groups", new { groupId = Model.Id, groupLink = Model.Link }))
+            using (Html.BeginForm("LeaveGroup", "Groups", new { groupId = Model.Id, groupLink = Model.Name }))
             {
                 @Html.AntiForgeryToken()
                 <input type="submit" value="Leave Group" class="btn btn-danger" />
             }
-            @Html.RouteLink("Photostreams management", "MyPhotoStreams", new { id = Model.Id, link = Model.Link })
+            @Html.RouteLink("Photostreams management", "MyPhotoStreams", new { id = Model.Id, link = Model.Name })
         }
     </div>
     <br />

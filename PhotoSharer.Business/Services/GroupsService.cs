@@ -31,9 +31,8 @@ namespace PhotoSharer.Business.Services
             var group = new AppGroup()
             {
                 Id = Guid.NewGuid(),
-                Name = groupName,
-                Link = UrlManager.GetSafeString(groupName),
-                CreatorId = creatorId
+                Name = groupName.Trim(),
+                OwnerId = creatorId
             };
 
             groupRepository.Save(group);
@@ -71,9 +70,9 @@ namespace PhotoSharer.Business.Services
             return groups;
         }
 
-        public AppGroup GetByGroupInfo(Guid groupId, string groupLink)
+        public AppGroup GetGroupById(Guid groupId)
         {
-            return groupRepository.GetGroupByGroupInfo(groupId, groupLink);
+            return groupRepository.GetById(groupId);
         }
     }
 }

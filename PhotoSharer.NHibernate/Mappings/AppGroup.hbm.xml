@@ -6,8 +6,7 @@
     <id name="Id" column="GroupId" type="guid" generator="assigned" />
 
     <property name="Name" not-null="true" />
-    <property name="Link" not-null="false" />
-    <property name="CreatorId" not-null="true" />
+    <property name="OwnerId" not-null="true" />
 
     <bag name="Users" table="GroupMembers" cascade="save-update" >
       <key column="GroupId"/>
