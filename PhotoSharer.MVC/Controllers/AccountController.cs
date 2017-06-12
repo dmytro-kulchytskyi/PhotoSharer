@@ -9,12 +9,13 @@ using System.Web;
 using PhotoSharer.Business.Managers;
 using PhotoSharer.Business.Services;
 using PhotoSharer.Business;
-using PhotoSharer.MVC.NInject;
+using PhotoSharer.MVC.NInjectIOC;
+using PhotoSharer.MVC.Attributes;
 
 namespace PhotoSharer.MVC.Controllers
 {
     [Authorize]
-    public class AccountController : BaseController
+    public class AccountController : Controller
     {
         private readonly IAuthenticationManager authenticationManager;
 
@@ -54,6 +55,7 @@ namespace PhotoSharer.MVC.Controllers
         }
 
         [AllowAnonymous]
+        [Transaction]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var loginInfo = await authenticationManager.GetExternalLoginInfoAsync();

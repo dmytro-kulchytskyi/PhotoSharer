@@ -5,8 +5,8 @@
 
 <h2>@ViewBag.Title</h2>
 <ul class="nav nav-pills">
-    <li role="presentation" class="active">@Html.ActionLink("My groups", "MyGroups", "Groups")</li>
-    <li role="presentation">@Html.ActionLink("Own Groups", "OwnGroups", "Groups")</li>
+    <li role="presentation" class="active">@Html.RouteLink("My groups", "MyGroups")</li>
+    <li role="presentation">@Html.ActionLink("Own Groups", "OwnGroups")</li>
 </ul>
 <hr />
 @if (Model.Count == 0)
@@ -22,7 +22,7 @@ else
                     @foreach (var group in Model)
                     {
                         <tr>
-                            <td>@Html.RouteLink(group.Name, "Details", new { id = group.Id, link = group.Link })</td>
+                            <td>@Html.RouteLink(group.Name, "GroupDetails", new { id = group.Id, link = group.Link })</td>
                         </tr>
                     }
                 </tbody>

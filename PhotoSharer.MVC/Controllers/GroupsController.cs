@@ -4,8 +4,9 @@ using PhotoSharer.Business;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.Business.Repository;
 using PhotoSharer.Business.Services;
+using PhotoSharer.MVC.Attributes;
 using PhotoSharer.MVC.Helpers;
-using PhotoSharer.MVC.NInject;
+using PhotoSharer.MVC.NInjectIOC;
 using PhotoSharer.MVC.ViewModels.Groups;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using System.Web.Mvc;
 namespace PhotoSharer.MVC.Controllers
 {
     [Authorize]
-    public class GroupsController : BaseController
+    public class GroupsController : Controller
     {
         private readonly GroupsService groupsService;
 
@@ -62,7 +63,7 @@ namespace PhotoSharer.MVC.Controllers
         [AllowAnonymous]
         public ActionResult Details(Guid? id, string link)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!IdentityHelper.IsAuthenticated)
                 return RedirectToAction("Login", "Account", new { returnUrl = Request.Url.AbsolutePath });
 
             if (!id.HasValue || string.IsNullOrEmpty(link))
@@ -86,22 +87,24 @@ namespace PhotoSharer.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Transaction]
         public ActionResult JoinGroup(Guid groupId, string groupLink)
         {
             var userId = IdentityHelper.UserId;
             groupsService.AddUser(userId, groupId);
-            return RedirectToRoute("Details", new { id = groupId, link = groupLink });
+            return RedirectToRoute("GroupDetails", new { id = groupId, link = groupLink });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Transaction]
         public ActionResult LeaveGroup(Guid groupId, string groupLink)
         {
             var userId = IdentityHelper.UserId;
 
             groupsService.RemoveUser(userId, groupId);
 
-            return RedirectToRoute("Details", new { id = groupId, link = groupLink });
+            return RedirectToRoute("GroupDetails", new { id = groupId, link = groupLink });
         }
 
         [HttpGet]
@@ -111,6 +114,7 @@ namespace PhotoSharer.MVC.Controllers
         }
 
         [HttpPost]
+        [Transaction]
         public ActionResult CreateGroup(CreateGroupViewModel model)
         {
             if (!ModelState.IsValid)
@@ -118,7 +122,7 @@ namespace PhotoSharer.MVC.Controllers
 
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
 
-            return RedirectToRoute("Details", new { id = group.Id, link = group.Link });
+            return RedirectToRoute("GroupDetails", new { id = group.Id, link = group.Link });
         }
 
         [HttpGet]
@@ -140,6 +144,7 @@ namespace PhotoSharer.MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Transaction]
         public ActionResult DeletePhotoStream(Guid? streamId, Guid? returnGroupId, string returnGroupLink)
         {
             if (streamId.HasValue)
@@ -152,11 +157,12 @@ namespace PhotoSharer.MVC.Controllers
                         return RedirectToRoute("MyPhotoStreams", new { id = returnGroupId, link = returnGroupLink });
                 }
             }
-            return RedirectToAction("MyGroups", "Groups");
+            return RedirectToRoute("MyGroups");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Transaction]
         public ActionResult AddPhotoStream(CreatePhotoStremViewModel model, Guid? returnGroupId, string returnGroupLink)
         {
             if (!ModelState.IsValid)
@@ -165,21 +171,21 @@ namespace PhotoSharer.MVC.Controllers
                 if (returnGroupId.HasValue && !string.IsNullOrEmpty(returnGroupLink))
                     return RedirectToRoute("MyPhotoStreams", new { id = returnGroupId, link = returnGroupLink });
                 else
-                    return RedirectToAction("MyGroups", "Groups");
+                    return RedirectToRoute("MyGroups");
             }
 
             if (!userService.IsInGroup(IdentityHelper.UserId, model.GroupId))
-                return RedirectToAction("MyGroups", "Groups");
+                return RedirectToRoute("MyGroups");
 
-            if (photoStreamService.IsInGroup(model.GroupId, model.Provider, model.Url))
-                return RedirectToAction("MyGroups", "Groups");
+            if (photoStreamService.IsStreamInGroup(model.GroupId, model.Provider, model.Url))
+                return RedirectToRoute("MyGroups");
 
             photoStreamService.CreatePhotoStream(IdentityHelper.UserId, model.GroupId, model.Provider, model.Url);
 
             if (returnGroupId.HasValue && !string.IsNullOrEmpty(returnGroupLink))
                 return RedirectToRoute("MyPhotoStreams", new { id = returnGroupId, link = returnGroupLink });
             else
-                return RedirectToAction("MyGroups", "Groups");
+                return RedirectToRoute("MyGroups");
         }
     }
 }

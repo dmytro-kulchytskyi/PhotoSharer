@@ -7,7 +7,7 @@ using System;
 
 namespace PhotoSharer.Nhibernate
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private static readonly ISessionFactory sessionFactory;
 
@@ -15,14 +15,19 @@ namespace PhotoSharer.Nhibernate
 
         private ISession session;
 
+        private bool useTransaction = false;
+
         public ISession Session
         {
             get
             {
                 if (session == null || !session.IsOpen)
-                {
                     session = sessionFactory.OpenSession();
-                    transaction = session.BeginTransaction();
+
+                if (useTransaction)
+                {
+                    if (transaction == null || !transaction.IsActive)
+                        transaction = session.BeginTransaction();
                 }
 
                 return session;
@@ -47,11 +52,14 @@ namespace PhotoSharer.Nhibernate
 
         public void BeginTransaction()
         {
-            transaction = Session.BeginTransaction();
+            useTransaction = true;
         }
 
         public void Commit()
         {
+            if (!useTransaction)
+                throw new InvalidOperationException("Transaction was not started");
+
             try
             {
                 if (transaction != null && transaction.IsActive)
@@ -66,12 +74,16 @@ namespace PhotoSharer.Nhibernate
             }
             finally
             {
-                Session.Dispose();
+                if (session != null)
+                    session.Dispose();
             }
         }
 
         void RollbackTransaction()
         {
+            if (!useTransaction)
+                throw new InvalidOperationException("Transaction was not started");
+
             try
             {
                 if (transaction != null && transaction.IsActive)
@@ -79,8 +91,21 @@ namespace PhotoSharer.Nhibernate
             }
             finally
             {
-                Session.Dispose();
+                if (session != null)
+                    session.Dispose();
             }
+        }
+
+        public void Dispose()
+        {
+            if (transaction != null && transaction.IsActive)
+                transaction.Dispose();
+
+            if (session != null && session.IsOpen)
+                session.Dispose();
+
+            session = null;
+            transaction = null;
         }
     }
 }

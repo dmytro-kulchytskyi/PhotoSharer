@@ -1,7 +1,7 @@
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PhotoSharer.MVC.NInject.IOC), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(PhotoSharer.MVC.NInject.IOC), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(PhotoSharer.MVC.NInjectIOC.IOC), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof(PhotoSharer.MVC.NInjectIOC.IOC), "Stop")]
 
-namespace PhotoSharer.MVC.NInject
+namespace PhotoSharer.MVC.NInjectIOC
 {
     using System;
     using System.Web;
@@ -18,6 +18,10 @@ namespace PhotoSharer.MVC.NInject
     using PhotoSharer.Business.Stores;
     using PhotoSharer.Nhibernate;
     using PhotoSharer.Business;
+    using Ninject.Web.Mvc.FilterBindingSyntax;
+    using System.Web.Mvc;
+    using PhotoSharer.MVC.ActionFilters;
+    using PhotoSharer.MVC.Attributes;
 
     public static class IOC
     {
@@ -87,6 +91,8 @@ namespace PhotoSharer.MVC.NInject
 
             kernel.Bind<UserManager<AppUser, Guid>>().To<AppUserManager>();
             kernel.Bind<SignInManager<AppUser, Guid>>().To<SignInManager<AppUser, Guid>>();
+
+            kernel.BindFilter<TransactionFilter>(FilterScope.Action, null).WhenActionMethodHas<TransactionAttribute>();
         }
     }
 }

@@ -112,12 +112,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilters\TransactionFilter.cs" />
+    <Compile Include="Attributes\TransactionAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Helpers\EntityMapper.cs" />
     <Compile Include="Helpers\IdentityHelper.cs" />
-    <Compile Include="NInject\IOC.cs" />
+    <Compile Include="NInjectIOC\IOC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Account\ExternalLoginConfirmationViewModel.cs" />
     <Compile Include="ViewModels\Account\ExternalLoginListViewModel.cs" />

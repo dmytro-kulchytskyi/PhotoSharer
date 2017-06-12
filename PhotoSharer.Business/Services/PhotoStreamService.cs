@@ -23,7 +23,7 @@ namespace PhotoSharer.Business.Services
             this.photoStreamRepository = photoStreamRepository;
         }
 
-        public bool IsInGroup(Guid groupId, string provider, string url)
+        public bool IsStreamInGroup(Guid groupId, string provider, string url)
         {
             return photoStreamRepository.IsExists(groupId, provider, url);
         }

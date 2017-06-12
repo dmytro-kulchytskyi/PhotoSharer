@@ -4,5 +4,6 @@
     {
         void BeginTransaction();
         void Commit();
+        void Dispose();
     }
 }
