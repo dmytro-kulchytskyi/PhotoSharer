@@ -36,10 +36,10 @@ namespace PhotoSharer.Nhibernate.Repository
                              .Where(it => it.GroupId == groupId && it.OwnerId == userId).ToList();
         }
 
-        public bool IsExists(Guid groupId, string provider, string url)
+        public bool IsExists(Guid groupId, ProviderInfo providerInfo)
         {
                return session.Query<PhotoStream>()
-                    .Any(it => it.GroupId == groupId && it.Provider == provider && it.Url == url);
+                    .Any(it => it.GroupId == groupId && it.Provider == providerInfo.Provider && it.Url == providerInfo.Url);
         }
     }
 }

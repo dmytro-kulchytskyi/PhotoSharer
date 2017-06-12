@@ -1,0 +1,26 @@
+﻿@using Microsoft.Owin.Security
+@using System.Linq
+@model PhotoSharer.MVC.ViewModels.Groups.CreatePhotoStremViewModel
+<table id="AddNewStream" class="table">
+    <tr>
+        @{
+            var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+            using (Html.BeginForm("AddPhotoStream", "Groups", new { groupId = Model.GroupId }))
+            {
+                @Html.AntiForgeryToken()
+
+                <td>
+                    @Html.DropDownListFor(model => model.Provider, loginProviders.Select(it => new SelectListItem { Text = it.Caption, Value = it.Caption }).ToList())
+                </td>
+                <td>
+                    @Html.LabelFor(model => model.Url)
+                    @Html.EditorFor(model => model.Url)
+                    @Html.ValidationMessageFor(model => model.Url)
+                </td>
+                <td>
+                    <input type="submit" class="btn btn-success" value="Add" />
+                </td>
+            }
+        }
+    </tr>
+</table>

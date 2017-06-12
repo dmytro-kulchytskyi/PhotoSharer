@@ -23,12 +23,12 @@ namespace PhotoSharer.Business.Services
             this.photoStreamRepository = photoStreamRepository;
         }
 
-        public bool IsStreamInGroup(Guid groupId, string provider, string url)
+        public bool IsStreamInGroup(Guid groupId, ProviderInfo providerInfo)
         {
-            return photoStreamRepository.IsExists(groupId, provider, url);
+            return photoStreamRepository.IsExists(groupId, providerInfo);
         }
 
-        public PhotoStream CreatePhotoStream(Guid userId, Guid groupId, string provider, string url)
+        public PhotoStream CreatePhotoStream(Guid userId, Guid groupId, ProviderInfo providerInfo)
         {
             if (!userService.IsUserExists(userId))
                 throw new ArgumentException("No such user");
@@ -40,8 +40,8 @@ namespace PhotoSharer.Business.Services
             {
                 Id = Guid.NewGuid(),
                 GroupId = groupId,
-                Provider = provider,
-                Url = url,
+                Provider = providerInfo.Provider,
+                Url = providerInfo.Url,
                 OwnerId = userId,
                 //-------------TODO----------------
                 AccountName = Guid.NewGuid().ToString(),

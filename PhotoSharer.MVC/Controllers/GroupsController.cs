@@ -75,10 +75,8 @@ namespace PhotoSharer.MVC.Controllers
             var model = Mapper.Map<GroupViewModel>(group);
 
             model.IsMember = userService.IsInGroup(userId, group.Id);
-
             if (model.IsMember)
                 model.IsCreator = group.OwnerId == userId;
-
             return View(model);
         }
 
@@ -119,7 +117,6 @@ namespace PhotoSharer.MVC.Controllers
                 return View(model);
 
             var group = groupsService.CreateGroup(model.Name, Guid.Parse(User.Identity.GetUserId()));
-
             return RedirectToRoute("GroupDetails", new { id = group.Id, link = group.Name });
         }
 
@@ -143,14 +140,17 @@ namespace PhotoSharer.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Transaction]
-        public ActionResult DeletePhotoStream(Guid streamId, Guid returnGroupId, string returnGroupLink)
+        public ActionResult DeletePhotoStream(Guid groupId, Guid streamId)
         {
-            if (photoStreamService.IsUsersPhotoStream(IdentityHelper.UserId, streamId))
+            var group = groupsService.GetGroupById(groupId);
+            if (group != null)
             {
-                photoStreamService.DeleteStream(streamId);
+                if (photoStreamService.IsUsersPhotoStream(IdentityHelper.UserId, streamId))
+                {
+                    photoStreamService.DeleteStream(streamId);
 
-                if (!string.IsNullOrEmpty(returnGroupLink))
-                    return RedirectToRoute("MyPhotoStreams", new { id = returnGroupId, link = returnGroupLink });
+                    return RedirectToRoute("MyPhotoStreams", new { id = groupId, link = group.Name });
+                }
             }
             return RedirectToRoute("MyGroups");
         }
@@ -158,29 +158,26 @@ namespace PhotoSharer.MVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Transaction]
-        public ActionResult AddPhotoStream(CreatePhotoStremViewModel model, Guid returnGroupId, string returnGroupLink)
+        public ActionResult AddPhotoStream(Guid groupId, CreatePhotoStremViewModel model)
         {
-            if (!ModelState.IsValid)
+            var group = groupsService.GetGroupById(groupId);
+
+            if (ModelState.IsValid)
             {
-                //TODO
-                if (string.IsNullOrEmpty(returnGroupLink))
-                    return RedirectToRoute("MyPhotoStreams", new { id = returnGroupId, link = returnGroupLink });
-                else
-                    return RedirectToRoute("MyGroups");
+                if (userService.IsInGroup(IdentityHelper.UserId, group.Id))
+                {
+                    var providerInfo = Mapper.Map<ProviderInfo>(model);
+
+                    if (!photoStreamService.IsStreamInGroup(group.Id, providerInfo))
+                        photoStreamService.CreatePhotoStream(IdentityHelper.UserId, groupId, providerInfo);
+                    else
+                    {
+                        ModelState.AddModelError("", "Account alredy added to this group.");
+                        return View("CreatePhotoStreamFailure");
+                    }
+                }
             }
-
-            if (!userService.IsInGroup(IdentityHelper.UserId, model.GroupId))
-                return RedirectToRoute("MyGroups");
-
-            if (photoStreamService.IsStreamInGroup(model.GroupId, model.Provider, model.Url))
-                return RedirectToRoute("MyGroups");
-
-            photoStreamService.CreatePhotoStream(IdentityHelper.UserId, model.GroupId, model.Provider, model.Url);
-
-            if (!string.IsNullOrEmpty(returnGroupLink))
-                return RedirectToRoute("MyPhotoStreams", new { id = returnGroupId, link = returnGroupLink });
-            else
-                return RedirectToRoute("MyGroups");
+            return RedirectToRoute("MyPhotoStreams", new { id = group.Id, link = group.Name });
         }
     }
 }

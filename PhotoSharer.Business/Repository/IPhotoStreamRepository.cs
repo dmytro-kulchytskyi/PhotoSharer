@@ -8,7 +8,7 @@ namespace PhotoSharer.Business.Repository
     {
         IList<PhotoStream> GetGroupPhotoStreams(Guid groupId);
         IList<PhotoStream> GetGroupPhotoStreamsByUserId(Guid groupId, Guid userId);
-        bool IsExists(Guid groupId, string provider, string url);
+        bool IsExists(Guid groupId, ProviderInfo providerInfo);
         Guid GetCreatorId(Guid photoStreamId);
     }
 }

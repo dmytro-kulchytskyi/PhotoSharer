@@ -10,13 +10,13 @@ namespace PhotoSharer.MVC.ViewModels.Groups
     public class CreatePhotoStremViewModel
     {
         [Required]
-        public Guid GroupId { get; set; }
-
-        [Required]
         public string Provider { get; set; }
 
         [Required]
-        [DataType(DataType.Url)]
+        [Url]
         public string Url { get; set; }
+
+        [ScaffoldColumn(false)]
+        public Guid GroupId { get; set; }
     }
 }

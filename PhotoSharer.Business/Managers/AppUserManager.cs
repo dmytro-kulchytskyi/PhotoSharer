@@ -13,7 +13,6 @@ namespace PhotoSharer.Business.Managers
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = false
             };
-            
             UserLockoutEnabledByDefault = false;
         }      
     }

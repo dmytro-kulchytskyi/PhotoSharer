@@ -17,12 +17,17 @@
         }
         else
         {
+            <div>
+                @Html.RouteLink("Photostreams management", "MyPhotoStreams", new { id = Model.Id, link = Model.Name }, new { @class = "btn btn-success" })
+            </div>
+            <br />
             using (Html.BeginForm("LeaveGroup", "Groups", new { groupId = Model.Id, groupLink = Model.Name }))
             {
                 @Html.AntiForgeryToken()
-                <input type="submit" value="Leave Group" class="btn btn-danger" />
+                <div>
+                    <input type="submit" value="Leave Group" class="btn btn-danger" />
+                </div>
             }
-            @Html.RouteLink("Photostreams management", "MyPhotoStreams", new { id = Model.Id, link = Model.Name })
         }
     </div>
     <br />

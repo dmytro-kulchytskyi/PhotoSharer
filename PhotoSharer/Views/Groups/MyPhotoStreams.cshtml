@@ -1,12 +1,10 @@
-﻿@using Microsoft.Owin.Security
-@using System.Linq
-@model PhotoStreamsListViewModel
+﻿@model PhotoStreamsListViewModel
 @{
     ViewBag.Title = "MyPhotoStreams";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Your photostreams in group: @Model.GroupName</h2>
+<h2>Group: @Model.GroupName</h2>
 
 <table class="table" id="PhotoStreamsTable">
     @foreach (var item in Model.PhotoStreams)
@@ -19,8 +17,7 @@
                 @Html.DisplayFor(modelItem => item.Url)
             </td>
             <td>
-                @using (Html.BeginForm("DeletePhotoStream", "Groups", 
-                    new { streamId = item.Id,  returnGroupId = Model.GroupId, returnGroupLink = Model.GroupName }))
+                @using (Html.BeginForm("DeletePhotoStream", "Groups", new { streamId = item.Id, groupId = Model.GroupId }))
                 {
                     @Html.AntiForgeryToken()
                     <input type="submit" class="btn btn-danger" value="Delete" />
@@ -28,27 +25,9 @@
             </td>
         </tr>
     }
-    <tr>
-        @{
-            var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-            using (Html.BeginForm("AddPhotoStream", "Groups", new { returnGroupId = Model.GroupId, returnGroupLink = Model.GroupName }))
-            {
-                @Html.AntiForgeryToken()
-
-                @Html.Hidden("GroupId", Model.GroupId)
-                <td>
-                    @Html.DropDownList("Provider", loginProviders.Select(it => new SelectListItem { Text = it.Caption, Value = it.Caption }).ToList())
-                </td>
-                <td>
-                    @Html.TextBox("Url")
-                </td>
-                <td>
-                    <input type="submit" class="btn btn-success" value="Add" />
-                </td>
-            }
-        }
-    </tr>
-
 </table>
+<br />
 
-@Html.RouteLink("Back", "GroupDetails", new { id = Model.GroupId, link = Model.GroupName })
+@Html.Partial("AddPhotoStreamPartial", new CreatePhotoStremViewModel { GroupId = Model.GroupId })
+
+@Html.RouteLink("Back to group", "GroupDetails", new { id = Model.GroupId, link = Model.GroupName })

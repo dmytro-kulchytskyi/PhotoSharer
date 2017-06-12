@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PhotoSharer.Business;
 using PhotoSharer.Business.Entities;
 using PhotoSharer.MVC.ViewModels.Groups;
 
@@ -21,6 +22,8 @@ namespace PhotoSharer.MVC.Helpers
                 cfg.CreateMap<AppGroup, PhotoStreamsListViewModel>()
                     .ForMember(it => it.GroupName, option => option.MapFrom(it => it.Name))
                     .ForMember(it => it.GroupId, option => option.MapFrom(it => it.Id));
+
+                cfg.CreateMap<CreatePhotoStremViewModel, ProviderInfo>();
             });
         }
     }

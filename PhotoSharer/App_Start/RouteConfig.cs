@@ -11,16 +11,16 @@ namespace PhotoSharer.Web
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-             routes.MapRoute(
-             name: "GroupDetails",
-                url: "group-{id}-{link}",
-                defaults: new
-                {
-                    controller = "Groups",
-                    action = "Details",
-                },
-                namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
-            );
+            routes.MapRoute(
+            name: "GroupDetails",
+               url: "group-{id}-{link}",
+               defaults: new
+               {
+                   controller = "Groups",
+                   action = "Details",
+               },
+               namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
+           );
 
             routes.MapRoute(
             name: "MyPhotoStreams",
@@ -76,9 +76,6 @@ namespace PhotoSharer.Web
                },
                namespaces: new string[] { "PhotoSharer.MVC.Controllers" }
            );
-
-          
-
         }
     }
 }
